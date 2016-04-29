@@ -1,6 +1,5 @@
-package com.marinovskiy.ekreativetestproject.ui.adapters;
+package com.marinovskiy.ekreativetestproject.adapters;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.marinovskiy.ekreativetestproject.R;
+import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
 import com.marinovskiy.ekreativetestproject.models.NetworkVideo;
-import com.marinovskiy.ekreativetestproject.ui.listeners.OnItemClickListener;
-import com.marinovskiy.ekreativetestproject.ui.listeners.OnLoadMoreListener;
 
 import java.util.List;
 import java.util.Locale;
@@ -30,50 +28,30 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<NetworkVideo> mVideoList;
 
     private OnItemClickListener mOnItemClickListener;
-    private OnLoadMoreListener mOnLoadMoreListener;
-    private int visibleThreshold = 3;
-    private int lastVisibleItem, totalItemCount;
-    private boolean loading;
 
-    public PlayListAdapter(List<NetworkVideo> videoList, RecyclerView recyclerView) {
+    public PlayListAdapter(List<NetworkVideo> videoList) {
         mVideoList = videoList;
-        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
-            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    totalItemCount = linearLayoutManager.getItemCount();
-                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                    if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                        if (mOnLoadMoreListener != null) {
-                            mOnLoadMoreListener.onLoadMore();
-                        }
-                        loading = true;
-                    }
-                }
-            });
-        }
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_ITEM) {
-            return new ItemViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.playlist_item_layout, parent, false));
-        } else if (viewType == TYPE_PB) {
-            return new ProgressBarViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.progress_bar_item, parent, false));
+        switch (viewType) {
+            case TYPE_ITEM:
+                return new ItemViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.playlist_item_layout, parent, false));
+            case TYPE_PB:
+                return new ProgressBarViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.progress_bar_item, parent, false));
+            default:
+                return null;
         }
-        return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
             ((ItemViewHolder) holder).bindVideo(mVideoList.get(position));
-        } else if (holder instanceof ItemViewHolder) {
+        } else {
             ((ProgressBarViewHolder) holder).mProgressBar.setIndeterminate(true);
         }
     }
@@ -146,23 +124,16 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     class ProgressBarViewHolder extends RecyclerView.ViewHolder {
 
-        public ProgressBar mProgressBar;
+        @Bind(R.id.pb_load_more)
+        ProgressBar mProgressBar;
 
         public ProgressBarViewHolder(View itemView) {
             super(itemView);
-            mProgressBar = (ProgressBar) itemView.findViewById(R.id.pb_load_more);
+            ButterKnife.bind(this, itemView);
         }
-    }
-
-    public void setLoaded() {
-        loading = false;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
-    }
-
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
-        mOnLoadMoreListener = onLoadMoreListener;
     }
 }

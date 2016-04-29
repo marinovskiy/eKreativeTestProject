@@ -1,6 +1,9 @@
 package com.marinovskiy.ekreativetestproject.screens.activities;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.marinovskiy.ekreativetestproject.R;
-import com.marinovskiy.ekreativetestproject.api.facebook.FacebookApiManager;
+import com.marinovskiy.ekreativetestproject.loaders.UserLoader;
 import com.marinovskiy.ekreativetestproject.managers.AuthManager;
 import com.marinovskiy.ekreativetestproject.managers.PreferenceManager;
 import com.marinovskiy.ekreativetestproject.models.NetworkUser;
@@ -24,15 +27,18 @@ import com.marinovskiy.ekreativetestproject.screens.fragments.PlayListFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        LoaderManager.LoaderCallbacks<NetworkUser> {
 
-    @Bind(R.id.toolbar)
+    private static final int LOADER_USER_ID = 0;
+
+    @Bind(R.id.toolbar_main)
     Toolbar mToolbar;
+
+    @Bind(R.id.toolbar_shadow_main)
+    View mToolbarShadow;
 
     @Bind(R.id.nav_view)
     NavigationView mNavigationView;
@@ -49,6 +55,9 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar(mToolbar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbarShadow.setVisibility(View.GONE);
+        }
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -67,6 +76,10 @@ public class MainActivity extends BaseActivity
 
         mNavigationView.setCheckedItem(R.id.action_nav_first_playlist);
 
+        Bundle args = new Bundle();
+        args.putString(UserLoader.LOADER_KEY_USER_ID, PreferenceManager.getUserId());
+        getLoaderManager().initLoader(LOADER_USER_ID, args, this);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -75,8 +88,20 @@ public class MainActivity extends BaseActivity
                             PlayListFragment.class.getSimpleName() + "1")
                     .commit();
         }
+    }
 
-        fetchUserProfile();
+    @Override
+    public Loader<NetworkUser> onCreateLoader(int id, Bundle args) {
+        return new UserLoader(getApplicationContext(), args);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<NetworkUser> loader, NetworkUser data) {
+        updateUi(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<NetworkUser> loader) {
     }
 
     @Override
@@ -124,21 +149,6 @@ public class MainActivity extends BaseActivity
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void fetchUserProfile() {
-        FacebookApiManager.getInstance().getUserProfile(PreferenceManager.getUserId()).enqueue(new Callback<NetworkUser>() {
-            @Override
-            public void onResponse(Call<NetworkUser> call, Response<NetworkUser> response) {
-                if (response.isSuccessful()) {
-                    updateUi(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<NetworkUser> call, Throwable t) {
-            }
-        });
     }
 
     private void updateUi(NetworkUser user) {

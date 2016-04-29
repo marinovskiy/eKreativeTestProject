@@ -12,19 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marinovskiy.ekreativetestproject.R;
+import com.marinovskiy.ekreativetestproject.adapters.PlayListAdapter;
+import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
 import com.marinovskiy.ekreativetestproject.loaders.PlayListLoader;
 import com.marinovskiy.ekreativetestproject.models.NetworkVideo;
 import com.marinovskiy.ekreativetestproject.models.NetworkYoutubeResponse;
 import com.marinovskiy.ekreativetestproject.screens.activities.PlayVideoActivity;
-import com.marinovskiy.ekreativetestproject.ui.adapters.PlayListAdapter;
-import com.marinovskiy.ekreativetestproject.ui.listeners.OnItemClickListener;
-import com.marinovskiy.ekreativetestproject.ui.listeners.OnLoadMoreListener;
 
 import java.util.List;
 
 import butterknife.Bind;
 
-public class PlayListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<NetworkYoutubeResponse> {
+public class PlayListFragment extends BaseFragment
+        implements LoaderManager.LoaderCallbacks<NetworkYoutubeResponse> {
 
     private static final String KEY_PLAYLIST_ID = "bundle_key_playlist_id";
 
@@ -33,17 +33,20 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
     @Bind(R.id.rv_playlist)
     RecyclerView mRvPlaylist;
 
-    private String mPlaylistId;
-
-    private List<NetworkVideo> mVideoList;
-
-    private String mNextPageToken;
+    private LinearLayoutManager mLinearLayoutManager;
     private PlayListAdapter playListAdapter;
 
-    private boolean mIsLoadedMore = false;
+    private String mPlaylistId;
+    private String mNextPageToken;
+    private List<NetworkVideo> mVideoList;
     private int mTotalResults;
 
     private Bundle mArgs;
+
+    private int mVisibleThreshold = 4;
+    private int mLastVisibleItem;
+    private int mLoadedItems;
+    private boolean mLoading;
 
     public static PlayListFragment newInstance(String playlistId) {
         PlayListFragment playListFragment = new PlayListFragment();
@@ -72,7 +75,27 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
         super.onActivityCreated(savedInstanceState);
 
         mRvPlaylist.setHasFixedSize(true);
-        mRvPlaylist.setLayoutManager(new LinearLayoutManager(getContext()));
+        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mRvPlaylist.setLayoutManager(mLinearLayoutManager);
+
+        mRvPlaylist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                mLoadedItems = mLinearLayoutManager.getItemCount();
+                mLastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
+
+                if (!mLoading && mLoadedItems <= (mLastVisibleItem + mVisibleThreshold)) {
+                    if (mVideoList.size() < mTotalResults) {
+                        mVideoList.add(null);
+                        playListAdapter.notifyItemInserted(mVideoList.size() - 1);
+                        loadNextVideos();
+                    }
+                    mLoading = true;
+                }
+            }
+        });
 
         mArgs = new Bundle();
         mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
@@ -86,41 +109,30 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<NetworkYoutubeResponse> loader, NetworkYoutubeResponse data) {
-        if (!mIsLoadedMore) {
+        if (mRvPlaylist.getAdapter() == null) {
             mVideoList = data.getVideoList();
             mNextPageToken = data.getNextPageToken();
             mTotalResults = data.getPageInfo().getTotalResults();
 
-            playListAdapter = new PlayListAdapter(mVideoList, mRvPlaylist);
+            playListAdapter = new PlayListAdapter(mVideoList);
             mRvPlaylist.setAdapter(playListAdapter);
 
             playListAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     Intent playVideoIntent = new Intent(getActivity(), PlayVideoActivity.class);
-                    playVideoIntent.putExtra(PlayVideoActivity.INTENT_KEY_VIDEO_ID, mVideoList.get(position).getId());
+                    playVideoIntent.putExtra(PlayVideoActivity.INTENT_KEY_VIDEO_ID,
+                            mVideoList.get(position).getId());
                     startActivity(playVideoIntent);
-                }
-            });
-
-            playListAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-                @Override
-                public void onLoadMore() {
-                    if (mVideoList.size() < mTotalResults) {
-                        mIsLoadedMore = true;
-
-                        mVideoList.add(null);
-                        playListAdapter.notifyItemInserted(mVideoList.size() - 1);
-
-                        loadNextVideos();
-                    }
                 }
             });
         } else {
             mNextPageToken = data.getNextPageToken();
+
             mVideoList.remove(mVideoList.size() - 1);
             playListAdapter.notifyItemRemoved(mVideoList.size());
-            playListAdapter.setLoaded();
+            mLoading = false;
+
             for (int i = 0; i < data.getVideoList().size(); i++) {
                 mVideoList.add(data.getVideoList().get(i));
                 playListAdapter.notifyItemInserted(mVideoList.size());

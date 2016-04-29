@@ -1,4 +1,4 @@
-package com.marinovskiy.ekreativetestproject.ui.listeners;
+package com.marinovskiy.ekreativetestproject.interfaces;
 
 import android.view.View;
 
