@@ -2,7 +2,6 @@ package com.marinovskiy.ekreativetestproject.screens.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -11,7 +10,7 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.marinovskiy.ekreativetestproject.R;
-import com.marinovskiy.ekreativetestproject.screens.utils.Prefs;
+import com.marinovskiy.ekreativetestproject.utils.Prefs;
 
 import butterknife.Bind;
 

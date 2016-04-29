@@ -1,6 +1,6 @@
 package com.marinovskiy.ekreativetestproject.api.facebook;
 
-import com.marinovskiy.ekreativetestproject.screens.utils.Prefs;
+import com.marinovskiy.ekreativetestproject.utils.Prefs;
 
 import java.io.IOException;
 

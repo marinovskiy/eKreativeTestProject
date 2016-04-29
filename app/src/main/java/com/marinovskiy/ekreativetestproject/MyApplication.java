@@ -3,7 +3,7 @@ package com.marinovskiy.ekreativetestproject;
 import android.app.Application;
 
 import com.facebook.FacebookSdk;
-import com.marinovskiy.ekreativetestproject.screens.utils.Prefs;
+import com.marinovskiy.ekreativetestproject.utils.Prefs;
 
 public class MyApplication extends Application {
 

@@ -1,4 +1,4 @@
-package com.marinovskiy.ekreativetestproject.screens.utils;
+package com.marinovskiy.ekreativetestproject.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

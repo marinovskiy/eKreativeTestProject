@@ -20,7 +20,7 @@ import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.api.facebook.FacebookApiManager;
 import com.marinovskiy.ekreativetestproject.models.NetworkUser;
 import com.marinovskiy.ekreativetestproject.screens.fragments.PlaylistFragment;
-import com.marinovskiy.ekreativetestproject.screens.utils.Prefs;
+import com.marinovskiy.ekreativetestproject.utils.Prefs;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

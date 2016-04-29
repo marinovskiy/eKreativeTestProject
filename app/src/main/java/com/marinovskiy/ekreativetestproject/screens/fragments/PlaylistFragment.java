@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.loaders.PlayListLoader;
 import com.marinovskiy.ekreativetestproject.models.NetworkYoutubeResponse;
-import com.marinovskiy.ekreativetestproject.ui.adapters.PlaylistAdapter;
+import com.marinovskiy.ekreativetestproject.ui.adapters.PlayListAdapter;
 import com.marinovskiy.ekreativetestproject.ui.listeners.OnItemClickListener;
 
 import butterknife.Bind;
@@ -67,10 +67,10 @@ public class PlaylistFragment extends BaseFragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<NetworkYoutubeResponse> loader, NetworkYoutubeResponse data) {
-        PlaylistAdapter playlistAdapter = new PlaylistAdapter(data.getVideoList());
+        PlayListAdapter playListAdapter = new PlayListAdapter(data.getVideoList());
         mRvPlaylist.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRvPlaylist.setAdapter(playlistAdapter);
-        playlistAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mRvPlaylist.setAdapter(playListAdapter);
+        playListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(getContext(), "Pos = " + position, Toast.LENGTH_SHORT).show();
