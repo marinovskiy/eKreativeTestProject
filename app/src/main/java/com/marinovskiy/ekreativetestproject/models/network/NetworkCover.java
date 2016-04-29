@@ -1,4 +1,4 @@
-package com.marinovskiy.ekreativetestproject.models;
+package com.marinovskiy.ekreativetestproject.models.network;
 
 import com.google.gson.annotations.SerializedName;
 

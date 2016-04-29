@@ -15,8 +15,9 @@ import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.adapters.PlayListAdapter;
 import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
 import com.marinovskiy.ekreativetestproject.loaders.PlayListLoader;
-import com.marinovskiy.ekreativetestproject.models.NetworkVideo;
-import com.marinovskiy.ekreativetestproject.models.NetworkYoutubeResponse;
+import com.marinovskiy.ekreativetestproject.managers.Utils;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkVideo;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkYoutubeResponse;
 import com.marinovskiy.ekreativetestproject.screens.activities.PlayVideoActivity;
 
 import java.util.List;
@@ -97,9 +98,13 @@ public class PlayListFragment extends BaseFragment
             }
         });
 
-        mArgs = new Bundle();
-        mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
-        getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this);
+        if (Utils.hasInternet(getContext())) {
+            mArgs = new Bundle();
+            mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
+            getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this);
+        } else {
+            // TODO get from db
+        }
     }
 
     @Override

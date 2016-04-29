@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
-import com.marinovskiy.ekreativetestproject.models.NetworkVideo;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkVideo;
 
 import java.util.List;
 import java.util.Locale;

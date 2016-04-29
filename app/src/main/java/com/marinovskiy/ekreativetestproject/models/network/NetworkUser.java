@@ -1,4 +1,4 @@
-package com.marinovskiy.ekreativetestproject.models;
+package com.marinovskiy.ekreativetestproject.models.network;
 
 public class NetworkUser {
 

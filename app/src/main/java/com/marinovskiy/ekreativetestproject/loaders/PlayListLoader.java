@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.marinovskiy.ekreativetestproject.api.youtube.YoutubeApiManager;
-import com.marinovskiy.ekreativetestproject.models.NetworkPageInfo;
-import com.marinovskiy.ekreativetestproject.models.NetworkYoutubeResponse;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkPageInfo;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkYoutubeResponse;
 
 import java.io.IOException;
 import java.util.HashMap;

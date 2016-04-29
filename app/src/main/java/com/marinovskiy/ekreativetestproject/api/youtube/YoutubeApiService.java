@@ -1,14 +1,11 @@
 package com.marinovskiy.ekreativetestproject.api.youtube;
 
-import com.marinovskiy.ekreativetestproject.models.NetworkUser;
-import com.marinovskiy.ekreativetestproject.models.NetworkYoutubeResponse;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkYoutubeResponse;
 
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface YoutubeApiService {

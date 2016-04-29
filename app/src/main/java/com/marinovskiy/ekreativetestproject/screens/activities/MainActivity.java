@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,12 +18,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.marinovskiy.ekreativetestproject.MyApplication;
 import com.marinovskiy.ekreativetestproject.R;
+import com.marinovskiy.ekreativetestproject.db.DbUtils;
 import com.marinovskiy.ekreativetestproject.loaders.UserLoader;
 import com.marinovskiy.ekreativetestproject.managers.AuthManager;
+import com.marinovskiy.ekreativetestproject.managers.ModelConverter;
 import com.marinovskiy.ekreativetestproject.managers.PreferenceManager;
-import com.marinovskiy.ekreativetestproject.models.NetworkUser;
+import com.marinovskiy.ekreativetestproject.managers.Utils;
+import com.marinovskiy.ekreativetestproject.models.db.User;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkUser;
 import com.marinovskiy.ekreativetestproject.screens.fragments.PlayListFragment;
+import com.rightutils.rightutils.collections.RightList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,6 +57,8 @@ public class MainActivity extends BaseActivity
     private PlayListFragment mSecondPlaylist;
     private PlayListFragment mThirdPlaylist;
 
+    private DbUtils mDbUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +85,15 @@ public class MainActivity extends BaseActivity
 
         mNavigationView.setCheckedItem(R.id.action_nav_first_playlist);
 
-        Bundle args = new Bundle();
-        args.putString(UserLoader.LOADER_KEY_USER_ID, PreferenceManager.getUserId());
-        getLoaderManager().initLoader(LOADER_USER_ID, args, this);
+        mDbUtils = MyApplication.sDbUtils;
+        if (Utils.hasInternet(getApplicationContext())) {
+            Bundle args = new Bundle();
+            args.putString(UserLoader.LOADER_KEY_USER_ID, PreferenceManager.getUserId());
+            getLoaderManager().initLoader(LOADER_USER_ID, args, this);
+        } else {
+            RightList<User> users = mDbUtils.getAllWhere(String.format("id = %s", PreferenceManager.getUserId()), User.class);
+            updateUi(users.get(0));
+        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -87,6 +102,19 @@ public class MainActivity extends BaseActivity
                             mFirstPlaylist,
                             PlayListFragment.class.getSimpleName() + "1")
                     .commit();
+        }
+
+        //User user = new User("123", "Alex M", "alex@gmail.com");
+//        user.setName("Alex M");
+//        user.setEmail("alex@gmail.com");
+        //dbUtils.add(user);
+
+        RightList<User> users = MyApplication.sDbUtils.getAll(User.class);
+        Log.i("dbtags", "onCreate: " + users.size());
+        for (User u : users) {
+            Log.i("dbtags", "onCreate: " + u.getId());
+            Log.i("dbtags", "onCreate: " + u.getName());
+            Log.i("dbtags", "onCreate: " + u.getEmail());
         }
     }
 
@@ -97,7 +125,11 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onLoadFinished(Loader<NetworkUser> loader, NetworkUser data) {
-        updateUi(data);
+        User user = ModelConverter.convertToUser(data);
+        RightList<User> users = mDbUtils.getAllWhere(String.format("id = %s", PreferenceManager.getUserId()), User.class);
+        if (users.size() == 0)
+            mDbUtils.add(user);
+        updateUi(user);
     }
 
     @Override
@@ -151,7 +183,7 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    private void updateUi(NetworkUser user) {
+    private void updateUi(User user) {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(user.getName());
@@ -167,11 +199,11 @@ public class MainActivity extends BaseActivity
         userEmail.setText(user.getEmail());
 
         Glide.with(this)
-                .load(user.getCover().getUrl())
+                .load(user.getCoverUrl())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(coverPhoto);
         Glide.with(this)
-                .load(user.getPicture().getData().getUrl())
+                .load(user.getAvatarUrl())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .into(userAvatar);

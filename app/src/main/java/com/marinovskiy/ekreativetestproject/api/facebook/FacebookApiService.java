@@ -1,6 +1,6 @@
 package com.marinovskiy.ekreativetestproject.api.facebook;
 
-import com.marinovskiy.ekreativetestproject.models.NetworkUser;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkUser;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

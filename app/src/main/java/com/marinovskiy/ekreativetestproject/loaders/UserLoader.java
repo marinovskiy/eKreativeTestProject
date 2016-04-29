@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.marinovskiy.ekreativetestproject.api.facebook.FacebookApiManager;
-import com.marinovskiy.ekreativetestproject.models.NetworkUser;
+import com.marinovskiy.ekreativetestproject.models.network.NetworkUser;
 
 import java.io.IOException;
 

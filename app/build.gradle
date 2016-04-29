@@ -19,6 +19,11 @@ android {
             storePassword '123456'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -46,4 +51,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    compile 'com.rightutils:app:1.4.0@aar'
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
 }
