@@ -16,7 +16,8 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class PlayActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+public class PlayVideoActivity extends YouTubeBaseActivity
+        implements YouTubePlayer.OnInitializedListener {
 
     public static final String INTENT_KEY_VIDEO_ID = "intent_key_video_id";
 
@@ -44,6 +45,7 @@ public class PlayActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         if (!wasRestored) {
             youTubePlayer.setFullscreen(true);
             youTubePlayer.cueVideo(mVideoId);
+            youTubePlayer.play();
         }
     }
 

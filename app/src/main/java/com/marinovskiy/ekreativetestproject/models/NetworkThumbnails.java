@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class NetworkThumbnails {
 
-    @SerializedName("high")
+    @SerializedName("medium")
     private NetworkVideoPicture videoPicture;
 
     public NetworkVideoPicture getVideoPicture() {

@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity
                     .beginTransaction()
                     .add(R.id.frame_container_main,
                             mFirstPlaylist,
-                            PlayListFragment.class.getSimpleName())
+                            PlayListFragment.class.getSimpleName() + "1")
                     .commit();
         }
 
@@ -98,27 +98,27 @@ public class MainActivity extends BaseActivity
             case R.id.action_nav_first_playlist:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frame_container_main,
+                        .add(R.id.frame_container_main,
                                 mFirstPlaylist,
-                                PlayListFragment.class.getSimpleName())
+                                PlayListFragment.class.getSimpleName() + "1")
                         .addToBackStack("1")
                         .commit();
                 break;
             case R.id.action_nav_second_playlist:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frame_container_main,
+                        .add(R.id.frame_container_main,
                                 mSecondPlaylist,
-                                PlayListFragment.class.getSimpleName())
+                                PlayListFragment.class.getSimpleName() + "2")
                         .addToBackStack("2")
                         .commit();
                 break;
             case R.id.action_nav_third_playlist:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frame_container_main,
+                        .add(R.id.frame_container_main,
                                 mThirdPlaylist,
-                                PlayListFragment.class.getSimpleName())
+                                PlayListFragment.class.getSimpleName() + "3")
                         .addToBackStack("3")
                         .commit();
                 break;
@@ -135,7 +135,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onResponse(Call<NetworkUser> call, Response<NetworkUser> response) {
                 if (response.isSuccessful()) {
-                    updateNavHeader(response.body());
+                    updateUi(response.body());
                 }
             }
 
@@ -145,7 +145,12 @@ public class MainActivity extends BaseActivity
         });
     }
 
-    private void updateNavHeader(NetworkUser user) {
+    private void updateUi(NetworkUser user) {
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(user.getName());
+        }
+
         View navigationHeader = mNavigationView.getHeaderView(0);
         ImageView coverPhoto = ButterKnife.findById(navigationHeader, R.id.nav_header_iv_cover);
         ImageView userAvatar = ButterKnife.findById(navigationHeader, R.id.nav_header_iv_avatar);

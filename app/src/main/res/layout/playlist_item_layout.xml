@@ -17,55 +17,62 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/card_container_margin_bottom"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_video_picture"
+            android:layout_weight="5"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/testimg" />
 
-            <ImageView
-                android:id="@+id/iv_video_picture"
+        <RelativeLayout
+            android:layout_weight="3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_video_title"
                 android:layout_width="wrap_content"
-                android:layout_height="175dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:src="@drawable/testimg1" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                tools:text="System Of A Down - Lonely Day" />
+
+            <TextView
+                android:id="@+id/tv_video_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_video_title"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="6dp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                tools:text="Description\nDescription\nDescription" />
 
             <TextView
                 android:id="@+id/tv_video_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="6dp"
-                android:background="@android:color/black"
-                android:padding="2dp"
-                android:text="45:54"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="6dp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                tools:text="4:54" />
 
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/tv_video_channel_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            tools:text="System Of A Down channel" />
-
-        <TextView
-            android:id="@+id/tv_video_information"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
-            tools:text="System Of A Down - Lonely Day | Views: 524 | 3 year ago" />
+        </RelativeLayout>
 
     </LinearLayout>
 

@@ -1,17 +1,20 @@
 package com.marinovskiy.ekreativetestproject.ui.adapters;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.models.NetworkVideo;
 import com.marinovskiy.ekreativetestproject.ui.listeners.OnItemClickListener;
+import com.marinovskiy.ekreativetestproject.ui.listeners.OnLoadMoreListener;
 
 import java.util.List;
 import java.util.Locale;
@@ -20,25 +23,63 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.ViewHolder> {
+public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private final int TYPE_ITEM = 1;
+    private final int TYPE_PB = 0;
 
     private List<NetworkVideo> mVideoList;
 
     private OnItemClickListener mOnItemClickListener;
+    private OnLoadMoreListener mOnLoadMoreListener;
+    private int visibleThreshold = 3;
+    private int lastVisibleItem, totalItemCount;
+    private boolean loading;
 
-    public PlayListAdapter(List<NetworkVideo> videoList) {
+    public PlayListAdapter(List<NetworkVideo> videoList, RecyclerView recyclerView) {
         mVideoList = videoList;
+        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    Log.i("loadmoretags", "totalItemCount = " + totalItemCount);
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    Log.i("loadmoretags", "lastVisibleItem = " + lastVisibleItem);
+                    if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    //if (!loading && (lastVisibleItem - 1) == totalItemCount) {
+                        if (mOnLoadMoreListener != null) {
+                            mOnLoadMoreListener.onLoadMore();
+                        }
+                        loading = true;
+                    }
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_ITEM) {
+            return new ItemViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.playlist_item_layout, parent, false));
+        } else if (viewType == TYPE_PB) {
+            return new ProgressBarViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.progress_bar_item, parent, false));
+        }
+        return null;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.playlist_item_layout, parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bindVideo(mVideoList.get(position));
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ItemViewHolder) {
+            ((ItemViewHolder) holder).bindVideo(mVideoList.get(position));
+        } else if (holder instanceof ItemViewHolder) {
+            ((ProgressBarViewHolder) holder).mProgressBar.setIndeterminate(true);
+        }
     }
 
     @Override
@@ -46,21 +87,26 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.ViewHo
         return mVideoList != null ? mVideoList.size() : 0;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @Override
+    public int getItemViewType(int position) {
+        return mVideoList.get(position) != null ? TYPE_ITEM : TYPE_PB;
+    }
+
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.iv_video_picture)
         ImageView mIvPicture;
 
+        @Bind(R.id.tv_video_title)
+        TextView mTvTitle;
+
+        @Bind(R.id.tv_video_description)
+        TextView mTvDescription;
+
         @Bind(R.id.tv_video_duration)
         TextView mTvDuration;
 
-        @Bind(R.id.tv_video_channel_title)
-        TextView mTvChannel;
-
-        @Bind(R.id.tv_video_information)
-        TextView mTvInformation;
-
-        public ViewHolder(View itemView) {
+        public ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
@@ -76,14 +122,11 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.ViewHo
         private void bindVideo(NetworkVideo video) {
             Glide.with(mIvPicture.getContext())
                     .load(video.getSnippet().getThumbnails().getVideoPicture().getUrl())
-                    .override(video.getSnippet().getThumbnails().getVideoPicture().getWidth(),
-                            video.getSnippet().getThumbnails().getVideoPicture().getHeight())
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(mIvPicture);
 
-            mTvDuration.setText(getDuration(video.getContentDetails().getDuration()));
-            mTvChannel.setText(video.getSnippet().getChannelTitle());
-            mTvInformation.setText(video.getSnippet().getVideoTitle() + " | " + getViews(video.getStatistics().getViewCount()) + " views");
+            mTvTitle.setText(video.getSnippet().getVideoTitle());
+            mTvDescription.setText(video.getSnippet().getDescription());
+//            mTvDuration.setText(getDuration(video.getContentDetails().getDuration()));
         }
 
         public String getDuration(String str) {
@@ -103,22 +146,27 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.ViewHo
                     TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
         }
 
-        private String getViews(String str) {
-            long views = Long.parseLong(str);
-            String result;
-            if (views > 999 && views < 1000000) {
-                result = String.valueOf(views / 1000) + "K";
-            } else if (views > 999999) {
-                result = String.valueOf(views / 1000000) + "M";
-            } else {
-                result = String.valueOf(views);
-            }
-            return result;
-        }
+    }
 
+    class ProgressBarViewHolder extends RecyclerView.ViewHolder {
+
+        public ProgressBar mProgressBar;
+
+        public ProgressBarViewHolder(View itemView) {
+            super(itemView);
+            mProgressBar = (ProgressBar) itemView.findViewById(R.id.pb_load_more);
+        }
+    }
+
+    public void setLoaded() {
+        loading = false;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        mOnLoadMoreListener = onLoadMoreListener;
     }
 }

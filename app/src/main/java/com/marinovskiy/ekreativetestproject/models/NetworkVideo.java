@@ -8,8 +8,6 @@ public class NetworkVideo {
 
     private NetworkContentDetails contentDetails;
 
-    private NetworkStatistics statistics;
-
     public String getId() {
         return id;
     }
@@ -32,13 +30,5 @@ public class NetworkVideo {
 
     public void setContentDetails(NetworkContentDetails contentDetails) {
         this.contentDetails = contentDetails;
-    }
-
-    public NetworkStatistics getStatistics() {
-        return statistics;
-    }
-
-    public void setStatistics(NetworkStatistics statistics) {
-        this.statistics = statistics;
     }
 }
