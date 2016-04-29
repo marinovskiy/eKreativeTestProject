@@ -9,18 +9,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.facebook.login.LoginManager;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.api.facebook.FacebookApiManager;
+import com.marinovskiy.ekreativetestproject.managers.AuthManager;
+import com.marinovskiy.ekreativetestproject.managers.PreferenceManager;
 import com.marinovskiy.ekreativetestproject.models.NetworkUser;
 import com.marinovskiy.ekreativetestproject.screens.fragments.PlayListFragment;
-import com.marinovskiy.ekreativetestproject.utils.Prefs;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,9 +39,6 @@ public class MainActivity extends BaseActivity
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-
-    @Bind(R.id.frame_container_main)
-    FrameLayout mFrameContainer;
 
     private PlayListFragment mFirstPlaylist;
     private PlayListFragment mSecondPlaylist;
@@ -131,7 +127,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void fetchUserProfile() {
-        FacebookApiManager.getInstance().getUserProfile(Prefs.getUserId()).enqueue(new Callback<NetworkUser>() {
+        FacebookApiManager.getInstance().getUserProfile(PreferenceManager.getUserId()).enqueue(new Callback<NetworkUser>() {
             @Override
             public void onResponse(Call<NetworkUser> call, Response<NetworkUser> response) {
                 if (response.isSuccessful()) {
@@ -172,8 +168,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void logOut() {
-        LoginManager.getInstance().logOut();
-        Prefs.setAccessToken(null);
+        AuthManager.logOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }

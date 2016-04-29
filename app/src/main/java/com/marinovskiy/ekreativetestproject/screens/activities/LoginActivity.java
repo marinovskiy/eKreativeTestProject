@@ -10,7 +10,8 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.marinovskiy.ekreativetestproject.R;
-import com.marinovskiy.ekreativetestproject.utils.Prefs;
+import com.marinovskiy.ekreativetestproject.managers.AuthManager;
+import com.marinovskiy.ekreativetestproject.managers.PreferenceManager;
 
 import butterknife.Bind;
 
@@ -24,7 +25,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Prefs.getAccessToken() != null) {
+        if (AuthManager.isUserLoggedIn()) {
             startMainActivity();
         }
 
@@ -35,8 +36,7 @@ public class LoginActivity extends BaseActivity {
         mBtnLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Prefs.setAccessToken(loginResult.getAccessToken().getToken());
-                Prefs.setUserId(loginResult.getAccessToken().getUserId());
+                AuthManager.login(loginResult);
                 startMainActivity();
             }
 

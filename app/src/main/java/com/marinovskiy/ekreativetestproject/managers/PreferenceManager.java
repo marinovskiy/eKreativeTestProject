@@ -1,17 +1,16 @@
-package com.marinovskiy.ekreativetestproject.utils;
+package com.marinovskiy.ekreativetestproject.managers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class Prefs {
+public class PreferenceManager {
 
     private static final String KEY_ACCESS_TOKEN = "prefs_key_access_token";
     private static final String KEY_USER_ID = "prefs_key_user_id";
-    private static final String KEY_NEXT_PAGE_TOKEN = "prefs_key_next_page_token";
 
     private static SharedPreferences sPrefs;
 
-    private Prefs() {
+    private PreferenceManager() {
     }
 
     public static void init(Context context) {
@@ -34,14 +33,6 @@ public class Prefs {
 
     public static String getUserId() {
         return sPrefs.getString(KEY_USER_ID, null);
-    }
-
-    public static void setNextPageToken(String value) {
-        updateValue(KEY_NEXT_PAGE_TOKEN, value);
-    }
-
-    public static String getNextPageToken() {
-        return sPrefs.getString(KEY_NEXT_PAGE_TOKEN, null);
     }
 
     private static void updateValue(String key, String value) {

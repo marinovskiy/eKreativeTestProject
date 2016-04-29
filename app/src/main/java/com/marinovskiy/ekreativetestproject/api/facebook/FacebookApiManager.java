@@ -1,6 +1,6 @@
 package com.marinovskiy.ekreativetestproject.api.facebook;
 
-import com.marinovskiy.ekreativetestproject.utils.Prefs;
+import com.marinovskiy.ekreativetestproject.managers.PreferenceManager;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ public class FacebookApiManager {
                 public Response intercept(Chain chain) throws IOException {
                     HttpUrl httpUrl = chain.request().url()
                             .newBuilder()
-                            .addQueryParameter(FacebookApiConstants.ACCESS_TOKEN, Prefs.getAccessToken())
+                            .addQueryParameter(FacebookApiConstants.ACCESS_TOKEN, PreferenceManager.getAccessToken())
                             .addQueryParameter("fields", "name, email, cover, picture")
                             .build();
 
