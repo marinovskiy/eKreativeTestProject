@@ -6,6 +6,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import com.marinovskiy.ekreativetestproject.api.youtube.YoutubeApiManager;
+import com.marinovskiy.ekreativetestproject.models.NetworkPageInfo;
 import com.marinovskiy.ekreativetestproject.models.NetworkYoutubeResponse;
 
 import java.io.IOException;
@@ -41,8 +42,9 @@ public class PlayListLoader extends AsyncTaskLoader<NetworkYoutubeResponse> {
         NetworkYoutubeResponse response = null;
         try {
             response = YoutubeApiManager.getInstance().getPlaylist(playListParameters).execute().body();
-            /*mNextPageToken = response.getNextPageToken();
-            Log.i("loaderslogtags", "in loader: get from response" + mNextPageToken);
+            mNextPageToken = response.getNextPageToken();
+            int total = response.getPageInfo().getTotalResults();
+            Log.i("mylogtags", "in loader: get from response" + response.getNextPageToken());
 
             String videoIds = "";
             for (int i = 0; i < response.getVideoList().size(); i++) {
@@ -52,8 +54,14 @@ public class PlayListLoader extends AsyncTaskLoader<NetworkYoutubeResponse> {
             videosParameters.put("part", "snippet,contentDetails,statistics");
             videosParameters.put("id", videoIds);
             response = YoutubeApiManager.getInstance().getVideos(videosParameters).execute().body();
+            //Log.i("mylogtags", "load VIDEO: bef video ID " + response.getVideoList().get(0).getId());
             response.setNextPageToken(mNextPageToken);
-            mNextPageToken = null;*/
+            NetworkPageInfo networkPageInfo = new NetworkPageInfo();
+            networkPageInfo.setTotalResults(total);
+            response.setPageInfo(networkPageInfo);
+            //Log.i("mylogtags", "load VIDEO: af video ID " + response.getVideoList().get(0).getId());
+            //Log.i("mylogtags", "in loader: get from variable" + mNextPageToken);
+            mNextPageToken = null;
         } catch (IOException e) {
             e.printStackTrace();
         }

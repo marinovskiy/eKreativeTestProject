@@ -40,11 +40,11 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
     @Bind(R.id.rv_playlist)
     RecyclerView mRvPlaylist;
 
-    private static String mPlaylistId;
+    private String mPlaylistId;
 
     private List<NetworkVideo> mVideoList;
 
-    private static String mNextPageToken;
+    private String mNextPageToken;
     private PlayListAdapter playListAdapter;
 
     private boolean mIsLoadedMore = false;
@@ -99,7 +99,7 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
             mVideoList = data.getVideoList();
             mNextPageToken = data.getNextPageToken();
             mTotalResults = data.getPageInfo().getTotalResults();
-            Log.i("loaderslogtags", "in fragment: get from data response1" + mNextPageToken);
+            Log.i("mylogtags", "in frag: get from variable 1 " + mNextPageToken);
 
             playListAdapter = new PlayListAdapter(mVideoList, mRvPlaylist);
             mRvPlaylist.setAdapter(playListAdapter);
@@ -109,6 +109,7 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
                 public void onItemClick(View view, int position) {
                     Intent playVideoIntent = new Intent(getActivity(), PlayVideoActivity.class);
                     playVideoIntent.putExtra(PlayVideoActivity.INTENT_KEY_VIDEO_ID, mVideoList.get(position).getId());
+                    //Log.i("mylogtags", "frag VIDEO: video ID " + mVideoList.get(position).getId());
                     startActivity(playVideoIntent);
                 }
             });
@@ -128,7 +129,7 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
             });
         } else {
             mNextPageToken = data.getNextPageToken();
-            Log.i("loaderslogtags", "in fragment: get from data response2" + mNextPageToken);
+            Log.i("mylogtags", "in frag: get from variable 2 " + mNextPageToken);
             mVideoList.remove(mVideoList.size() - 1);
             playListAdapter.notifyItemRemoved(mVideoList.size());
             playListAdapter.setLoaded();
@@ -148,69 +149,5 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
         Log.i("loaderslogtags", "in fragment: in loadNextVideos" + mNextPageToken);
         mArgs.putString(PlayListLoader.LOADER_KEY_NEXT_PAGE_TOKEN, mNextPageToken);
         getLoaderManager().restartLoader(LOADER_PLAYLIST_ID, mArgs, this);
-    }
-
-    static class PlayListLoader1 extends AsyncTaskLoader<NetworkYoutubeResponse> {
-
-        public PlayListLoader1(Context context, Bundle args) {
-            super(context);
-            Log.i("loaderlifecycle", "PlayListLoader()");
-        }
-
-        @Override
-        public NetworkYoutubeResponse loadInBackground() {
-            Log.i("loaderlifecycle", "loadInBackground");
-            Map<String, String> playListParameters = new HashMap<>();
-            playListParameters.put("part", "snippet");
-            playListParameters.put("playlistId", mPlaylistId);
-            playListParameters.put("maxResults", "10");
-            if (mNextPageToken != null) {
-                playListParameters.put("pageToken", mNextPageToken);
-                Log.i("loaderslogtags", "in loader: put into MAP" + mNextPageToken);
-            }
-            NetworkYoutubeResponse response = null;
-            try {
-                response = YoutubeApiManager.getInstance().getPlaylist(playListParameters).execute().body();
-                mNextPageToken = response.getNextPageToken();
-                Log.i("loaderslogtags", "in loader: get from response" + mNextPageToken);
-
-                /*String videoIds = "";
-                for (int i = 0; i < response.getVideoList().size(); i++) {
-                    videoIds = videoIds + response.getVideoList().get(i).getSnippet().getResourceId().getVideoId() + ",";
-                }
-                Map<String, String> videosParameters = new HashMap<>();
-                videosParameters.put("part", "snippet,contentDetails,statistics");
-                videosParameters.put("id", videoIds);
-                response = YoutubeApiManager.getInstance().getVideos(videosParameters).execute().body();*/
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return response;
-        }
-
-        @Override
-        public void forceLoad() {
-            super.forceLoad();
-            Log.i("loaderlifecycle", "forceLoad");
-        }
-
-        @Override
-        protected void onStartLoading() {
-            super.onStartLoading();
-            Log.i("loaderlifecycle", "onStartLoading");
-            forceLoad();
-        }
-
-        @Override
-        protected void onStopLoading() {
-            super.onStopLoading();
-            Log.i("loaderlifecycle", "onStopLoading");
-        }
-
-        @Override
-        public void deliverResult(NetworkYoutubeResponse data) {
-            super.deliverResult(data);
-            Log.i("loaderlifecycle", "deliverResult");
-        }
     }
 }
