@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface ApiService {
+public interface FacebookApiService {
 
     @GET("/{user-id}")
     Call<NetworkUser> getUserProfile(@Path("user-id") String userId);

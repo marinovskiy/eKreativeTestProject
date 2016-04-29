@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,8 +17,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.login.LoginManager;
 import com.marinovskiy.ekreativetestproject.R;
-import com.marinovskiy.ekreativetestproject.api.facebook.ApiManager;
+import com.marinovskiy.ekreativetestproject.api.facebook.FacebookApiManager;
 import com.marinovskiy.ekreativetestproject.models.NetworkUser;
+import com.marinovskiy.ekreativetestproject.screens.fragments.PlaylistFragment;
 import com.marinovskiy.ekreativetestproject.screens.utils.Prefs;
 
 import butterknife.Bind;
@@ -39,6 +41,13 @@ public class MainActivity extends BaseActivity
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
+    @Bind(R.id.frame_container_main)
+    FrameLayout mFrameContainer;
+
+    private PlaylistFragment mFirstPlaylist;
+    private PlaylistFragment mSecondPlaylist;
+    private PlaylistFragment mThirdPlaylist;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +65,21 @@ public class MainActivity extends BaseActivity
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
+        mFirstPlaylist = PlaylistFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi");
+        mSecondPlaylist = PlaylistFragment.newInstance("PL16B22E52465A93A4");
+        mThirdPlaylist = PlaylistFragment.newInstance("PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c");
+
+        mNavigationView.setCheckedItem(R.id.action_nav_first_playlist);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frame_container_main,
+                            mFirstPlaylist,
+                            PlaylistFragment.class.getSimpleName())
+                    .commit();
+        }
+
         fetchUserProfile();
     }
 
@@ -72,10 +96,31 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_nav_first_playlist:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_container_main,
+                                mFirstPlaylist,
+                                PlaylistFragment.class.getSimpleName())
+                        .addToBackStack("1")
+                        .commit();
                 break;
             case R.id.action_nav_second_playlist:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_container_main,
+                                mSecondPlaylist,
+                                PlaylistFragment.class.getSimpleName())
+                        .addToBackStack("2")
+                        .commit();
                 break;
             case R.id.action_nav_third_playlist:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_container_main,
+                                mThirdPlaylist,
+                                PlaylistFragment.class.getSimpleName())
+                        .addToBackStack("3")
+                        .commit();
                 break;
             case R.id.action_nav_logout:
                 logOut();
@@ -86,7 +131,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void fetchUserProfile() {
-        ApiManager.getInstance().getUserProfile(Prefs.getUserId()).enqueue(new Callback<NetworkUser>() {
+        FacebookApiManager.getInstance().getUserProfile(Prefs.getUserId()).enqueue(new Callback<NetworkUser>() {
             @Override
             public void onResponse(Call<NetworkUser> call, Response<NetworkUser> response) {
                 if (response.isSuccessful()) {

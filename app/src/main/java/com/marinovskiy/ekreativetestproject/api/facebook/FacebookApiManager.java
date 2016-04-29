@@ -13,11 +13,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiManager {
+public class FacebookApiManager {
 
-    private static ApiService sInstance;
+    private static FacebookApiService sInstance;
 
-    public static synchronized ApiService getInstance() {
+    public static synchronized FacebookApiService getInstance() {
         if (sInstance == null) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -27,7 +27,7 @@ public class ApiManager {
                 public Response intercept(Chain chain) throws IOException {
                     HttpUrl httpUrl = chain.request().url()
                             .newBuilder()
-                            .addQueryParameter(ApiConstants.ACCESS_TOKEN, Prefs.getAccessToken())
+                            .addQueryParameter(FacebookApiConstants.ACCESS_TOKEN, Prefs.getAccessToken())
                             .addQueryParameter("fields", "name, email, cover, picture")
                             .build();
 
@@ -45,12 +45,12 @@ public class ApiManager {
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(ApiConstants.BASE_URL + ApiConstants.API_VERSION)
+                    .baseUrl(FacebookApiConstants.BASE_URL + FacebookApiConstants.API_VERSION)
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            sInstance = retrofit.create(ApiService.class);
+            sInstance = retrofit.create(FacebookApiService.class);
         }
         return sInstance;
     }

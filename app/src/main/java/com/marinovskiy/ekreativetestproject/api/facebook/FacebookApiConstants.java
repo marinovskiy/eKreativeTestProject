@@ -1,6 +1,6 @@
 package com.marinovskiy.ekreativetestproject.api.facebook;
 
-public final class ApiConstants {
+public final class FacebookApiConstants {
 
     public static final String BASE_URL = "https://graph.facebook.com/";
 

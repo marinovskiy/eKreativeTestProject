@@ -1,7 +1,5 @@
 package com.marinovskiy.ekreativetestproject.api.youtube;
 
-import com.marinovskiy.ekreativetestproject.screens.utils.Prefs;
-
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
@@ -13,11 +11,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiManager {
+public class YoutubeApiManager {
 
-    private static ApiService sInstance;
+    private static YoutubeApiService sInstance;
 
-    public static synchronized ApiService getInstance() {
+    public static synchronized YoutubeApiService getInstance() {
         if (sInstance == null) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -27,8 +25,7 @@ public class ApiManager {
                 public Response intercept(Chain chain) throws IOException {
                     HttpUrl httpUrl = chain.request().url()
                             .newBuilder()
-                            .addQueryParameter(ApiConstants.ACCESS_TOKEN, Prefs.getAccessToken())
-                            .addQueryParameter("fields", "name, email, cover, picture")
+                            .addQueryParameter(YoutubeApiConstants.KEY, YoutubeApiConstants.API_KEY)
                             .build();
 
                     Request request = chain.request()
@@ -45,12 +42,12 @@ public class ApiManager {
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(ApiConstants.BASE_URL + ApiConstants.API_VERSION)
+                    .baseUrl(YoutubeApiConstants.BASE_URL + YoutubeApiConstants.API_VERSION)
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            sInstance = retrofit.create(ApiService.class);
+            sInstance = retrofit.create(YoutubeApiService.class);
         }
         return sInstance;
     }
