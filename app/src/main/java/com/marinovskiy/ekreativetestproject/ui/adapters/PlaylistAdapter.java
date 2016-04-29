@@ -2,7 +2,6 @@ package com.marinovskiy.ekreativetestproject.ui.adapters;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +44,8 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     totalItemCount = linearLayoutManager.getItemCount();
-                    Log.i("loadmoretags", "totalItemCount = " + totalItemCount);
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                    Log.i("loadmoretags", "lastVisibleItem = " + lastVisibleItem);
                     if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                    //if (!loading && (lastVisibleItem - 1) == totalItemCount) {
                         if (mOnLoadMoreListener != null) {
                             mOnLoadMoreListener.onLoadMore();
                         }
@@ -126,7 +122,7 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             mTvTitle.setText(video.getSnippet().getVideoTitle());
             mTvDescription.setText(video.getSnippet().getDescription());
-//            mTvDuration.setText(getDuration(video.getContentDetails().getDuration()));
+            mTvDuration.setText(getDuration(video.getContentDetails().getDuration()));
         }
 
         public String getDuration(String str) {

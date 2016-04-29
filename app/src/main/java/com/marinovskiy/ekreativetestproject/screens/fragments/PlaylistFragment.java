@@ -1,21 +1,17 @@
 package com.marinovskiy.ekreativetestproject.screens.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.marinovskiy.ekreativetestproject.R;
-import com.marinovskiy.ekreativetestproject.api.youtube.YoutubeApiManager;
 import com.marinovskiy.ekreativetestproject.loaders.PlayListLoader;
 import com.marinovskiy.ekreativetestproject.models.NetworkVideo;
 import com.marinovskiy.ekreativetestproject.models.NetworkYoutubeResponse;
@@ -24,10 +20,7 @@ import com.marinovskiy.ekreativetestproject.ui.adapters.PlayListAdapter;
 import com.marinovskiy.ekreativetestproject.ui.listeners.OnItemClickListener;
 import com.marinovskiy.ekreativetestproject.ui.listeners.OnLoadMoreListener;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 
@@ -88,18 +81,15 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
 
     @Override
     public Loader<NetworkYoutubeResponse> onCreateLoader(int id, Bundle args) {
-        Log.i("loaderlifecycle", "onCreateLoader()");
         return new PlayListLoader(getContext(), args);
     }
 
     @Override
     public void onLoadFinished(Loader<NetworkYoutubeResponse> loader, NetworkYoutubeResponse data) {
-        Log.i("loaderlifecycle", "onLoadFinished()");
         if (!mIsLoadedMore) {
             mVideoList = data.getVideoList();
             mNextPageToken = data.getNextPageToken();
             mTotalResults = data.getPageInfo().getTotalResults();
-            Log.i("mylogtags", "in frag: get from variable 1 " + mNextPageToken);
 
             playListAdapter = new PlayListAdapter(mVideoList, mRvPlaylist);
             mRvPlaylist.setAdapter(playListAdapter);
@@ -109,7 +99,6 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
                 public void onItemClick(View view, int position) {
                     Intent playVideoIntent = new Intent(getActivity(), PlayVideoActivity.class);
                     playVideoIntent.putExtra(PlayVideoActivity.INTENT_KEY_VIDEO_ID, mVideoList.get(position).getId());
-                    //Log.i("mylogtags", "frag VIDEO: video ID " + mVideoList.get(position).getId());
                     startActivity(playVideoIntent);
                 }
             });
@@ -129,7 +118,6 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
             });
         } else {
             mNextPageToken = data.getNextPageToken();
-            Log.i("mylogtags", "in frag: get from variable 2 " + mNextPageToken);
             mVideoList.remove(mVideoList.size() - 1);
             playListAdapter.notifyItemRemoved(mVideoList.size());
             playListAdapter.setLoaded();
@@ -142,11 +130,9 @@ public class PlayListFragment extends BaseFragment implements LoaderManager.Load
 
     @Override
     public void onLoaderReset(Loader<NetworkYoutubeResponse> loader) {
-        Log.i("loaderlifecycle", "onLoaderReset()");
     }
 
     private void loadNextVideos() {
-        Log.i("loaderslogtags", "in fragment: in loadNextVideos" + mNextPageToken);
         mArgs.putString(PlayListLoader.LOADER_KEY_NEXT_PAGE_TOKEN, mNextPageToken);
         getLoaderManager().restartLoader(LOADER_PLAYLIST_ID, mArgs, this);
     }

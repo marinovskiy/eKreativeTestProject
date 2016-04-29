@@ -17,6 +17,7 @@ public class AuthManager {
     public static void logOut() {
         LoginManager.getInstance().logOut();
         PreferenceManager.setAccessToken(null);
+        PreferenceManager.setUserId(null);
     }
 
 }
