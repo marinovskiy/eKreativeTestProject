@@ -2,11 +2,21 @@ package com.marinovskiy.ekreativetestproject.models;
 
 public class NetworkVideo {
 
+    private String id;
+
     private NetworkSnippet snippet;
 
     private NetworkContentDetails contentDetails;
 
     private NetworkStatistics statistics;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public NetworkSnippet getSnippet() {
         return snippet;

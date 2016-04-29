@@ -1,5 +1,6 @@
 package com.marinovskiy.ekreativetestproject.screens.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -9,17 +10,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.loaders.PlayListLoader;
+import com.marinovskiy.ekreativetestproject.models.NetworkVideo;
 import com.marinovskiy.ekreativetestproject.models.NetworkYoutubeResponse;
+import com.marinovskiy.ekreativetestproject.screens.activities.PlayActivity;
 import com.marinovskiy.ekreativetestproject.ui.adapters.PlayListAdapter;
 import com.marinovskiy.ekreativetestproject.ui.listeners.OnItemClickListener;
 
+import java.util.List;
+
 import butterknife.Bind;
 
-public class PlaylistFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<NetworkYoutubeResponse> {
+public class PlayListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<NetworkYoutubeResponse> {
 
     private static final String KEY_PLAYLIST_ID = "bundle_key_playlist_id";
 
@@ -30,12 +34,14 @@ public class PlaylistFragment extends BaseFragment implements LoaderManager.Load
 
     private String mPlaylistId;
 
-    public static PlaylistFragment newInstance(String playlistId) {
-        PlaylistFragment playlistFragment = new PlaylistFragment();
+    private List<NetworkVideo> mVideoList;
+
+    public static PlayListFragment newInstance(String playlistId) {
+        PlayListFragment playListFragment = new PlayListFragment();
         Bundle args = new Bundle();
         args.putString(KEY_PLAYLIST_ID, playlistId);
-        playlistFragment.setArguments(args);
-        return playlistFragment;
+        playListFragment.setArguments(args);
+        return playListFragment;
     }
 
     @Override
@@ -67,13 +73,16 @@ public class PlaylistFragment extends BaseFragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<NetworkYoutubeResponse> loader, NetworkYoutubeResponse data) {
-        PlayListAdapter playListAdapter = new PlayListAdapter(data.getVideoList());
+        mVideoList = data.getVideoList();
+        PlayListAdapter playListAdapter = new PlayListAdapter(mVideoList);
         mRvPlaylist.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvPlaylist.setAdapter(playListAdapter);
         playListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "Pos = " + position, Toast.LENGTH_SHORT).show();
+                Intent playVideoIntent = new Intent(getActivity(), PlayActivity.class);
+                playVideoIntent.putExtra(PlayActivity.INTENT_KEY_VIDEO_ID, mVideoList.get(position).getId());
+                startActivity(playVideoIntent);
             }
         });
     }

@@ -19,7 +19,7 @@ import com.facebook.login.LoginManager;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.api.facebook.FacebookApiManager;
 import com.marinovskiy.ekreativetestproject.models.NetworkUser;
-import com.marinovskiy.ekreativetestproject.screens.fragments.PlaylistFragment;
+import com.marinovskiy.ekreativetestproject.screens.fragments.PlayListFragment;
 import com.marinovskiy.ekreativetestproject.utils.Prefs;
 
 import butterknife.Bind;
@@ -44,9 +44,9 @@ public class MainActivity extends BaseActivity
     @Bind(R.id.frame_container_main)
     FrameLayout mFrameContainer;
 
-    private PlaylistFragment mFirstPlaylist;
-    private PlaylistFragment mSecondPlaylist;
-    private PlaylistFragment mThirdPlaylist;
+    private PlayListFragment mFirstPlaylist;
+    private PlayListFragment mSecondPlaylist;
+    private PlayListFragment mThirdPlaylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +65,9 @@ public class MainActivity extends BaseActivity
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        mFirstPlaylist = PlaylistFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi");
-        mSecondPlaylist = PlaylistFragment.newInstance("PL16B22E52465A93A4");
-        mThirdPlaylist = PlaylistFragment.newInstance("PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c");
+        mFirstPlaylist = PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi");
+        mSecondPlaylist = PlayListFragment.newInstance("PL16B22E52465A93A4");
+        mThirdPlaylist = PlayListFragment.newInstance("PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c");
 
         mNavigationView.setCheckedItem(R.id.action_nav_first_playlist);
 
@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity
                     .beginTransaction()
                     .add(R.id.frame_container_main,
                             mFirstPlaylist,
-                            PlaylistFragment.class.getSimpleName())
+                            PlayListFragment.class.getSimpleName())
                     .commit();
         }
 
@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity
                         .beginTransaction()
                         .replace(R.id.frame_container_main,
                                 mFirstPlaylist,
-                                PlaylistFragment.class.getSimpleName())
+                                PlayListFragment.class.getSimpleName())
                         .addToBackStack("1")
                         .commit();
                 break;
@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity
                         .beginTransaction()
                         .replace(R.id.frame_container_main,
                                 mSecondPlaylist,
-                                PlaylistFragment.class.getSimpleName())
+                                PlayListFragment.class.getSimpleName())
                         .addToBackStack("2")
                         .commit();
                 break;
@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity
                         .beginTransaction()
                         .replace(R.id.frame_container_main,
                                 mThirdPlaylist,
-                                PlaylistFragment.class.getSimpleName())
+                                PlayListFragment.class.getSimpleName())
                         .addToBackStack("3")
                         .commit();
                 break;
