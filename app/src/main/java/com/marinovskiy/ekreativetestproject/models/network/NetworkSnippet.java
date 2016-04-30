@@ -1,37 +1,23 @@
 package com.marinovskiy.ekreativetestproject.models.network;
 
-import com.google.gson.annotations.SerializedName;
-
 public class NetworkSnippet {
 
-    @SerializedName("publishedAt")
-    private String publishedDate;
-
-    @SerializedName("title")
-    private String videoTitle;
+    private String title;
 
     private String description;
-
-    private String channelTitle;
 
     private NetworkResource resourceId;
 
     private NetworkThumbnails thumbnails;
 
-    public String getPublishedDate() {
-        return publishedDate;
+    private String playlistId;
+
+    public String getTitle() {
+        return title;
     }
 
-    public void setPublishedDate(String publishedDate) {
-        this.publishedDate = publishedDate;
-    }
-
-    public String getVideoTitle() {
-        return videoTitle;
-    }
-
-    public void setVideoTitle(String videoTitle) {
-        this.videoTitle = videoTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -40,14 +26,6 @@ public class NetworkSnippet {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getChannelTitle() {
-        return channelTitle;
-    }
-
-    public void setChannelTitle(String channelTitle) {
-        this.channelTitle = channelTitle;
     }
 
     public NetworkResource getResourceId() {
@@ -64,5 +42,13 @@ public class NetworkSnippet {
 
     public void setThumbnails(NetworkThumbnails thumbnails) {
         this.thumbnails = thumbnails;
+    }
+
+    public String getPlaylistId() {
+        return playlistId;
+    }
+
+    public void setPlaylistId(String playlistId) {
+        this.playlistId = playlistId;
     }
 }

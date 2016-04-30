@@ -5,6 +5,9 @@ import com.marinovskiy.ekreativetestproject.models.db.Video;
 import com.marinovskiy.ekreativetestproject.models.network.NetworkUser;
 import com.marinovskiy.ekreativetestproject.models.network.NetworkVideo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ModelConverter {
 
     public static User convertToUser(NetworkUser networkUser) {
@@ -15,12 +18,17 @@ public class ModelConverter {
                 networkUser.getCover().getUrl());
     }
 
-    public static Video convertToVideo(NetworkVideo networkVideo) {
-        return new Video(networkVideo.getId(),
-                networkVideo.getSnippet().getThumbnails().getVideoPicture().getUrl(),
-                networkVideo.getSnippet().getVideoTitle(),
-                networkVideo.getSnippet().getDescription(),
-                networkVideo.getContentDetails().getDuration());
+    public static List<Video> convertToVideos(List<NetworkVideo> networkVideoList, String playlistId) {
+        List<Video> videoList = new ArrayList<>();
+        for (NetworkVideo networkVideo : networkVideoList) {
+            videoList.add(new Video(networkVideo.getId(),
+                    networkVideo.getSnippet().getThumbnails().getVideoPicture().getUrl(),
+                    networkVideo.getSnippet().getVideoTitle(),
+                    networkVideo.getSnippet().getDescription(),
+                    networkVideo.getContentDetails().getDuration(),
+                    playlistId));
+        }
+        return videoList;
     }
 
 }

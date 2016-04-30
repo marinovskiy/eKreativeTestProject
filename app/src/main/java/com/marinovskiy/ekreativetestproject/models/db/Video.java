@@ -15,15 +15,18 @@ public class Video {
 
     private String duration;
 
+    private String playlistId;
+
     public Video() {
     }
 
-    public Video(String id, String pictureUrl, String title, String description, String duration) {
+    public Video(String id, String pictureUrl, String title, String description, String duration, String playlistId) {
         this.id = id;
         this.pictureUrl = pictureUrl;
         this.title = title;
         this.description = description;
         this.duration = duration;
+        this.playlistId = playlistId;
     }
 
     public String getId() {
@@ -64,5 +67,13 @@ public class Video {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getPlaylistId() {
+        return playlistId;
+    }
+
+    public void setPlaylistId(String playlistId) {
+        this.playlistId = playlistId;
     }
 }

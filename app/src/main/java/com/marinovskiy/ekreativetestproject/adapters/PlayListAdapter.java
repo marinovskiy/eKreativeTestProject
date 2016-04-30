@@ -9,9 +9,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
-import com.marinovskiy.ekreativetestproject.models.network.NetworkVideo;
+import com.marinovskiy.ekreativetestproject.models.db.Video;
 
 import java.util.List;
 import java.util.Locale;
@@ -25,11 +26,11 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int TYPE_ITEM = 1;
     private final int TYPE_PB = 0;
 
-    private List<NetworkVideo> mVideoList;
+    private List<Video> mVideoList;
 
     private OnItemClickListener mOnItemClickListener;
 
-    public PlayListAdapter(List<NetworkVideo> videoList) {
+    public PlayListAdapter(List<Video> videoList) {
         mVideoList = videoList;
     }
 
@@ -93,14 +94,15 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
 
-        private void bindVideo(NetworkVideo video) {
+        private void bindVideo(Video video) {
             Glide.with(mIvPicture.getContext())
-                    .load(video.getSnippet().getThumbnails().getVideoPicture().getUrl())
+                    .load(video.getPictureUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(mIvPicture);
 
-            mTvTitle.setText(video.getSnippet().getVideoTitle());
-            mTvDescription.setText(video.getSnippet().getDescription());
-            mTvDuration.setText(getDuration(video.getContentDetails().getDuration()));
+            mTvTitle.setText(video.getTitle());
+            mTvDescription.setText(video.getDescription());
+            mTvDuration.setText(getDuration(video.getDuration()));
         }
 
         public String getDuration(String str) {
