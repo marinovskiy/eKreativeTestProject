@@ -15,8 +15,8 @@ public class User {
 
     private String coverUrl;
 
-    public User() {
-    }
+//    public User() {
+//    }
 
     public User(String id, String name, String email, String avatarUrl, String coverUrl) {
         this.id = id;

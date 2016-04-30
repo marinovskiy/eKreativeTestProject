@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoaderManager.LoaderCallbacks<NetworkUser> {
 
-    private static final int LOADER_USER_ID = 0;
+    private static final int LOADER_USER_ID = 0; // TODO STRINGS
 
     @Bind(R.id.toolbar_main)
     Toolbar mToolbar;
@@ -51,7 +51,6 @@ public class MainActivity extends BaseActivity
     DrawerLayout mDrawerLayout;
 
     private int mDrawerPosition = 1;
-
     private PlayListFragment mCurrentFragment;
 
     @Override

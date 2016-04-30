@@ -12,11 +12,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
+import com.marinovskiy.ekreativetestproject.managers.Utils;
 import com.marinovskiy.ekreativetestproject.models.db.Video;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -102,26 +101,8 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             mTvTitle.setText(video.getTitle());
             mTvDescription.setText(video.getDescription());
-            mTvDuration.setText(getDuration(video.getDuration()));
+            mTvDuration.setText(Utils.getDuration(video.getDuration()));
         }
-
-        public String getDuration(String str) {
-            String time = str.substring(2);
-            long duration = 0L;
-            Object[][] indexs = new Object[][]{{"H", 3600}, {"M", 60}, {"S", 1}};
-            for (int i = 0; i < indexs.length; i++) {
-                int index = time.indexOf((String) indexs[i][0]);
-                if (index != -1) {
-                    String value = time.substring(0, index);
-                    duration += Integer.parseInt(value) * (int) indexs[i][1] * 1000;
-                    time = time.substring(value.length() + 1);
-                }
-            }
-            return String.format(Locale.getDefault(), "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(duration),
-                    TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
-                    TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
-        }
-
     }
 
     class ProgressBarViewHolder extends RecyclerView.ViewHolder {

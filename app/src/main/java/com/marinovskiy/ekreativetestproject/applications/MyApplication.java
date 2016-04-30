@@ -1,4 +1,4 @@
-package com.marinovskiy.ekreativetestproject;
+package com.marinovskiy.ekreativetestproject.applications;
 
 import android.app.Application;
 

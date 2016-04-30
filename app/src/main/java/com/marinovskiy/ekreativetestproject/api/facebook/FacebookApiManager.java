@@ -27,8 +27,9 @@ public class FacebookApiManager {
                 public Response intercept(Chain chain) throws IOException {
                     HttpUrl httpUrl = chain.request().url()
                             .newBuilder()
-                            .addQueryParameter(FacebookApiConstants.ACCESS_TOKEN, PreferenceManager.getAccessToken())
-                            .addQueryParameter("fields", "name, email, cover, picture")
+                            .addQueryParameter(FacebookApiConstants.ACCESS_TOKEN,
+                                    PreferenceManager.getAccessToken())
+                            .addQueryParameter("fields", "name, email, cover, picture") // TODO STRINGS
                             .build();
 
                     Request request = chain.request()

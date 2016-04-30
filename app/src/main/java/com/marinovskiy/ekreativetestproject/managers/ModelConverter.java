@@ -18,7 +18,8 @@ public class ModelConverter {
                 networkUser.getCover().getUrl());
     }
 
-    public static List<Video> convertToVideos(List<NetworkVideo> networkVideoList, String playlistId) {
+    public static List<Video> convertToVideos(List<NetworkVideo> networkVideoList,
+                                              String playlistId) {
         List<Video> videoList = new ArrayList<>();
         for (NetworkVideo networkVideo : networkVideoList) {
             videoList.add(new Video(networkVideo.getId(),

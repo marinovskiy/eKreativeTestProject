@@ -6,7 +6,6 @@ import com.marinovskiy.ekreativetestproject.models.db.User;
 import com.marinovskiy.ekreativetestproject.models.db.Video;
 import com.rightutils.rightutils.db.RightDBUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DbUtils extends RightDBUtils {
@@ -43,7 +42,8 @@ public class DbUtils extends RightDBUtils {
     }
 
     public static List<Video> getVideos(String playListId) {
-        List<Video> videoList = sDbUtils.getAllWhere(String.format("playlistId = '%s'", playListId), Video.class);
+        List<Video> videoList = sDbUtils.getAllWhere(String.format("playlistId = '%s'", playListId),
+                Video.class);
         return videoList.size() != 0 ? videoList : null;
     }
 

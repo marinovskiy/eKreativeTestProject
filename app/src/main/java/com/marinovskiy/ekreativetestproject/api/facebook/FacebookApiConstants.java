@@ -8,6 +8,4 @@ public final class FacebookApiConstants {
 
     public static final String ACCESS_TOKEN = "access_token";
 
-    public static final String USER_ID_PATH = "/{user-id}";
-
 }

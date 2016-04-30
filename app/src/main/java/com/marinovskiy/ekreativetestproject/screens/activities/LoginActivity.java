@@ -30,7 +30,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         setContentView(R.layout.activity_login);
-        mBtnLogin.setReadPermissions("public_profile", "email");
+        mBtnLogin.setReadPermissions("public_profile", "email"); // TODO STRINGS
 
         mCallbackManager = CallbackManager.Factory.create();
         mBtnLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {

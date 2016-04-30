@@ -29,7 +29,7 @@ public class PlayListLoader extends AsyncTaskLoader<NetworkYoutubeResponse> {
     @Override
     public NetworkYoutubeResponse loadInBackground() {
         Map<String, String> playListParameters = new HashMap<>();
-        playListParameters.put("part", "snippet");
+        playListParameters.put("part", "snippet"); // TODO STRINGS
         playListParameters.put("playlistId", mPlaylistId);
         playListParameters.put("maxResults", "10");
         if (mNextPageToken != null) {
@@ -37,7 +37,7 @@ public class PlayListLoader extends AsyncTaskLoader<NetworkYoutubeResponse> {
         }
         NetworkYoutubeResponse response = null;
         try {
-            response = YoutubeApiManager.getInstance().getPlaylist(playListParameters).execute().body();
+            response = YoutubeApiManager.getInstance().getPlaylist(playListParameters).execute().body(); // TODO check is succesfull
             mNextPageToken = response.getNextPageToken();
             int total = response.getPageInfo().getTotalResults();
 
@@ -46,7 +46,7 @@ public class PlayListLoader extends AsyncTaskLoader<NetworkYoutubeResponse> {
                 videoIds = videoIds + response.getVideoList().get(i).getSnippet().getResourceId().getVideoId() + ",";
             }
             Map<String, String> videosParameters = new HashMap<>();
-            videosParameters.put("part", "snippet,contentDetails,statistics");
+            videosParameters.put("part", "snippet,contentDetails,statistics"); // TODO STRINGS
             videosParameters.put("id", videoIds);
             response = YoutubeApiManager.getInstance().getVideos(videosParameters).execute().body();
             response.setNextPageToken(mNextPageToken);

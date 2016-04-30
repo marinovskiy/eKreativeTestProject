@@ -55,7 +55,7 @@ public class PlayVideoActivity extends YouTubeBaseActivity
         if (error.isUserRecoverableError()) {
             error.getErrorDialog(this, RECOVERY_REQUEST).show();
         } else {
-            Toast.makeText(this, String.format(Locale.getDefault(), "Error: %s", error.toString()),
+            Toast.makeText(this, String.format(Locale.getDefault(), "Error: %s", error.toString()), // TODO STRINGS
                     Toast.LENGTH_LONG).show();
         }
     }
