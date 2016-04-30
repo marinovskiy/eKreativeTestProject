@@ -15,6 +15,6 @@ public class MyApplication extends Application {
         super.onCreate();
         PreferenceManager.init(getApplicationContext());
         FacebookSdk.sdkInitialize(getApplicationContext());
-        sDbUtils = DbUtils.newInstance(this, "my_db.sqlite", 1);
+        sDbUtils = DbUtils.newInstance(this, "ekreative_test_db.sqlite", 1);
     }
 }

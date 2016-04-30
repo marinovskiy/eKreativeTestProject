@@ -16,15 +16,18 @@ import android.widget.Toast;
 
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.adapters.PlayListAdapter;
+import com.marinovskiy.ekreativetestproject.db.DbUtils;
 import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
 import com.marinovskiy.ekreativetestproject.loaders.PlayListLoader;
 import com.marinovskiy.ekreativetestproject.managers.ModelConverter;
+import com.marinovskiy.ekreativetestproject.managers.PreferenceManager;
 import com.marinovskiy.ekreativetestproject.managers.Utils;
 import com.marinovskiy.ekreativetestproject.models.db.ParcelableVideoList;
 import com.marinovskiy.ekreativetestproject.models.db.Video;
 import com.marinovskiy.ekreativetestproject.models.network.NetworkYoutubeResponse;
 import com.marinovskiy.ekreativetestproject.screens.activities.PlayVideoActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -47,7 +50,7 @@ public class PlayListFragment extends BaseFragment
 
     private String mPlaylistId;
     private String mNextPageToken;
-    private List<Video> mVideoList;
+    private List<Video> mVideoList = new ArrayList<>();
     private int mTotalResults;
 
     private Bundle mArgs;
@@ -56,6 +59,8 @@ public class PlayListFragment extends BaseFragment
     private int mLastVisibleItem;
     private int mLoadedItems;
     private boolean mLoading;
+
+    private boolean mIsNeedToLoad = true;
 
     public static PlayListFragment newInstance(String playlistId) {
         PlayListFragment playListFragment = new PlayListFragment();
@@ -83,72 +88,62 @@ public class PlayListFragment extends BaseFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setRetainInstance(true);
-
         mRvPlaylist.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRvPlaylist.setLayoutManager(mLinearLayoutManager);
 
-        if (Utils.hasInternet(getContext())) {
-            mRvPlaylist.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
+        mRvPlaylist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
-                    mLoadedItems = mLinearLayoutManager.getItemCount();
-                    mLastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
+                mLoadedItems = mLinearLayoutManager.getItemCount();
+                mLastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
 
-                    if (!mLoading && mLoadedItems <= (mLastVisibleItem + mVisibleThreshold)) {
-                        if (mVideoList.size() < mTotalResults) {
-                            mVideoList.add(null);
-                            playListAdapter.notifyItemInserted(mVideoList.size() - 1);
-                            loadNextVideos();
-                        }
-                        mLoading = true;
+                if (!mLoading && mLoadedItems <= (mLastVisibleItem + mVisibleThreshold)) {
+                    if (mVideoList.size() < mTotalResults) {
+                        mVideoList.add(null);
+                        playListAdapter.notifyItemInserted(mVideoList.size() - 1);
+                        loadNextVideos();
                     }
+                    mLoading = true;
                 }
-            });
+            }
+        });
+
+        if (savedInstanceState != null) {
+            Toast.makeText(getContext(), "playlist id = " + mPlaylistId, Toast.LENGTH_SHORT).show();
+            ParcelableVideoList parcelableVideoList = savedInstanceState.getParcelable("bundle_video_list");
+            if (parcelableVideoList != null) {
+                updateUi(parcelableVideoList.getVideoList());
+            }
+            mNextPageToken = savedInstanceState.getString("bundle_next_page_token");
+            mTotalResults = savedInstanceState.getInt("bundle_total_results");
+            mRvPlaylist.scrollToPosition(savedInstanceState.getInt("bundle_next_rv_position"));
+            mIsNeedToLoad = false;
         }
 
         mArgs = new Bundle();
         mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
 
-        if (Utils.hasInternet(getContext())) {
+        if (Utils.hasInternet(getContext()) && mIsNeedToLoad) {
             getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this);
         } else {
-            //updateUi(DbUtils.getVideosBy(mPlaylistId));
+            updateUi(DbUtils.getVideos(mPlaylistId));
+            //Log.i("logtags123", "onActivityCreated: " + DbUtils.getUser(PreferenceManager.getUserId()).getEmail());
+            //Log.i("logtags123", "onActivityCreated: " + DbUtils.getVideosBy(mPlaylistId).get(0).getTitle());
         }
-
-        /*if (savedInstanceState != null) {
-            Toast.makeText(getContext(), "playlist id = " + mPlaylistId, Toast.LENGTH_SHORT).show();
-            /*ParcelableVideoList parcelableVideoList = savedInstanceState.getParcelable("bundle_video_list");
-            if (parcelableVideoList != null) {
-                mVideoList = parcelableVideoList.getVideoList(); try to clear mVideoList
-            }*/
-            /*mNextPageToken = savedInstanceState.getString("bundle_next_page_token");
-            mTotalResults = savedInstanceState.getInt("bundle_next_total_results");
-            int rvPos = savedInstanceState.getInt("bundle_next_rv_position");
-            mRvPlaylist.scrollToPosition(rvPos);
-            Log.i("resotorelogs", "onActivityCreated: " + mVideoList);
-            Log.i("resotorelogs", "onActivityCreated: " + mNextPageToken);
-            Log.i("resotorelogs", "onActivityCreated: " + mTotalResults);
-            Log.i("resotorelogs", "onActivityCreated: " + rvPos);
-        }*/
     }
 
-    /*@Override
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         ParcelableVideoList parcelableVideoList = new ParcelableVideoList(mVideoList);
         outState.putParcelable("bundle_video_list", parcelableVideoList);
         outState.putString("bundle_next_page_token", mNextPageToken);
-        outState.putInt("bundle_next_total_results", mTotalResults);
+        outState.putInt("bundle_total_results", mTotalResults);
         outState.putInt("bundle_next_rv_position", mLastVisibleItem);
-        Log.i("resotorelogs", "onSaveInstanceState: " + parcelableVideoList.getVideoList());
-        Log.i("resotorelogs", "onSaveInstanceState: " + mNextPageToken);
-        Log.i("resotorelogs", "onSaveInstanceState: " + mTotalResults);
-        Log.i("resotorelogs", "onSaveInstanceState: " + mLinearLayoutManager.findFirstVisibleItemPosition());
-    }*/
+    }
 
     @Override
     public Loader<NetworkYoutubeResponse> onCreateLoader(int id, Bundle args) {
@@ -160,7 +155,7 @@ public class PlayListFragment extends BaseFragment
         mTotalResults = data.getPageInfo().getTotalResults();
         mNextPageToken = data.getNextPageToken();
         List<Video> videoList = ModelConverter.convertToVideos(data.getVideoList(), mPlaylistId);
-//        DbUtils.saveVideos(videoList);
+        DbUtils.saveVideos(videoList);
         updateUi(videoList);
     }
 
@@ -169,7 +164,7 @@ public class PlayListFragment extends BaseFragment
     }
 
     private void updateUi(List<Video> videoList) {
-        if (videoList.size() == 0) { // TODO check when end DB
+        if (videoList == null) {
             mRvPlaylist.setVisibility(View.GONE);
             mEmptyView.setVisibility(View.VISIBLE);
         } else {

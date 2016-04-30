@@ -3,6 +3,7 @@ package com.marinovskiy.ekreativetestproject.models.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.rightutils.rightutils.db.ColumnIgnore;
 import com.rightutils.rightutils.db.TableName;
 
 @TableName("videos")
@@ -10,35 +11,35 @@ public class Video implements Parcelable {
 
     private String id;
 
-    private String pictureUrl;
+    private String playlistId;
 
     private String title;
+
+    private String pictureUrl;
 
     private String description;
 
     private String duration;
 
-    private String playlistId;
-
     public Video() {
     }
 
-    public Video(String id, String pictureUrl, String title, String description, String duration, String playlistId) {
+    public Video(String id, String playlistId, String title, String pictureUrl, String description, String duration) {
         this.id = id;
-        this.pictureUrl = pictureUrl;
+        this.playlistId = playlistId;
         this.title = title;
+        this.pictureUrl = pictureUrl;
         this.description = description;
         this.duration = duration;
-        this.playlistId = playlistId;
     }
 
     protected Video(Parcel in) {
         id = in.readString();
-        pictureUrl = in.readString();
+        playlistId = in.readString();
         title = in.readString();
+        pictureUrl = in.readString();
         description = in.readString();
         duration = in.readString();
-        playlistId = in.readString();
     }
 
     @Override
@@ -49,11 +50,11 @@ public class Video implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeString(pictureUrl);
+        dest.writeString(playlistId);
         dest.writeString(title);
+        dest.writeString(pictureUrl);
         dest.writeString(description);
         dest.writeString(duration);
-        dest.writeString(playlistId);
     }
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {
@@ -76,12 +77,12 @@ public class Video implements Parcelable {
         this.id = id;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getPlaylistId() {
+        return playlistId;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setPlaylistId(String playlistId) {
+        this.playlistId = playlistId;
     }
 
     public String getTitle() {
@@ -90,6 +91,14 @@ public class Video implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public String getDescription() {
@@ -106,13 +115,5 @@ public class Video implements Parcelable {
 
     public void setDuration(String duration) {
         this.duration = duration;
-    }
-
-    public String getPlaylistId() {
-        return playlistId;
-    }
-
-    public void setPlaylistId(String playlistId) {
-        this.playlistId = playlistId;
     }
 }

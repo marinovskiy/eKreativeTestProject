@@ -22,11 +22,11 @@ public class ModelConverter {
         List<Video> videoList = new ArrayList<>();
         for (NetworkVideo networkVideo : networkVideoList) {
             videoList.add(new Video(networkVideo.getId(),
-                    networkVideo.getSnippet().getThumbnails().getVideoPicture().getUrl(),
+                    playlistId,
                     networkVideo.getSnippet().getTitle(),
+                    networkVideo.getSnippet().getThumbnails().getVideoPicture().getUrl(),
                     networkVideo.getSnippet().getDescription(),
-                    networkVideo.getContentDetails().getDuration(),
-                    playlistId));
+                    networkVideo.getContentDetails().getDuration()));
         }
         return videoList;
     }

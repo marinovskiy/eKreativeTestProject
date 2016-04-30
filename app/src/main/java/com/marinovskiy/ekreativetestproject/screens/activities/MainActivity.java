@@ -52,6 +52,8 @@ public class MainActivity extends BaseActivity
 
     private int mDrawerPosition = 1;
 
+    private PlayListFragment mCurrentFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +84,11 @@ public class MainActivity extends BaseActivity
         }
 
         if (savedInstanceState == null) {
+            mCurrentFragment = PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi");
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.frame_container_main,
-                            PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi"),
-                            PlayListFragment.class.getSimpleName() + "1")
+                            mCurrentFragment)
                     .commit();
         }
     }
@@ -121,30 +123,33 @@ public class MainActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.action_nav_first_playlist:
                 if (mDrawerPosition != 1) {
+                    mCurrentFragment = PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi");
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(R.id.frame_container_main,
-                                    PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi"))
+                                    mCurrentFragment)
                             .commit();
                     mDrawerPosition = 1;
                 }
                 break;
             case R.id.action_nav_second_playlist:
                 if (mDrawerPosition != 2) {
+                    mCurrentFragment = PlayListFragment.newInstance("PL16B22E52465A93A4");
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(R.id.frame_container_main,
-                                    PlayListFragment.newInstance("PL16B22E52465A93A4"))
+                                    mCurrentFragment)
                             .commit();
                     mDrawerPosition = 2;
                 }
                 break;
             case R.id.action_nav_third_playlist:
                 if (mDrawerPosition != 3) {
+                    mCurrentFragment = PlayListFragment.newInstance("PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c");
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(R.id.frame_container_main,
-                                    PlayListFragment.newInstance("PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c"))
+                                    mCurrentFragment)
                             .commit();
                     mDrawerPosition = 3;
                 }
