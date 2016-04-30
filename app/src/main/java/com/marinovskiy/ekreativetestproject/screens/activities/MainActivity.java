@@ -50,9 +50,7 @@ public class MainActivity extends BaseActivity
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
-    private PlayListFragment mFirstPlaylist;
-    private PlayListFragment mSecondPlaylist;
-    private PlayListFragment mThirdPlaylist;
+    private int mDrawerPosition = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +81,11 @@ public class MainActivity extends BaseActivity
             updateUi(DbUtils.getUser(PreferenceManager.getUserId()));
         }
 
-        mFirstPlaylist = PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi");
-        mSecondPlaylist = PlayListFragment.newInstance("PL16B22E52465A93A4");
-        mThirdPlaylist = PlayListFragment.newInstance("PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c");
-
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.frame_container_main,
-                            mFirstPlaylist,
+                            PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi"),
                             PlayListFragment.class.getSimpleName() + "1")
                     .commit();
         }
@@ -126,31 +120,34 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_nav_first_playlist:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.frame_container_main,
-                                mFirstPlaylist,
-                                PlayListFragment.class.getSimpleName() + "1")
-                        .addToBackStack("1")
-                        .commit();
+                if (mDrawerPosition != 1) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.frame_container_main,
+                                    PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi"))
+                            .commit();
+                    mDrawerPosition = 1;
+                }
                 break;
             case R.id.action_nav_second_playlist:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.frame_container_main,
-                                mSecondPlaylist,
-                                PlayListFragment.class.getSimpleName() + "2")
-                        .addToBackStack("2")
-                        .commit();
+                if (mDrawerPosition != 2) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.frame_container_main,
+                                    PlayListFragment.newInstance("PL16B22E52465A93A4"))
+                            .commit();
+                    mDrawerPosition = 2;
+                }
                 break;
             case R.id.action_nav_third_playlist:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.frame_container_main,
-                                mThirdPlaylist,
-                                PlayListFragment.class.getSimpleName() + "3")
-                        .addToBackStack("3")
-                        .commit();
+                if (mDrawerPosition != 3) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.frame_container_main,
+                                    PlayListFragment.newInstance("PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c"))
+                            .commit();
+                    mDrawerPosition = 3;
+                }
                 break;
             case R.id.action_nav_logout:
                 logOut();

@@ -23,7 +23,7 @@ public class ModelConverter {
         for (NetworkVideo networkVideo : networkVideoList) {
             videoList.add(new Video(networkVideo.getId(),
                     networkVideo.getSnippet().getThumbnails().getVideoPicture().getUrl(),
-                    networkVideo.getSnippet().getVideoTitle(),
+                    networkVideo.getSnippet().getTitle(),
                     networkVideo.getSnippet().getDescription(),
                     networkVideo.getContentDetails().getDuration(),
                     playlistId));

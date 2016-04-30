@@ -1,5 +1,7 @@
 package com.marinovskiy.ekreativetestproject.models.network;
 
+import android.os.Parcel;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -12,6 +14,10 @@ public class NetworkYoutubeResponse {
 
     @SerializedName("items")
     private List<NetworkVideo> videoList;
+
+    protected NetworkYoutubeResponse(Parcel in) {
+        nextPageToken = in.readString();
+    }
 
     public String getNextPageToken() {
         return nextPageToken;
