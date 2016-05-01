@@ -78,7 +78,7 @@ public class PlayListLoader extends AsyncTaskLoader<NetworkYoutubeResponse> {
     @Override
     protected void onStartLoading() {
         super.onStartLoading();
-        forceLoad();
+        //forceLoad();
     }
 
     @Override

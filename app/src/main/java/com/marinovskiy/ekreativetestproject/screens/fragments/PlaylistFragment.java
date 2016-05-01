@@ -120,8 +120,12 @@ public class PlayListFragment extends BaseFragment
             });
         }
 
+        mArgs = new Bundle();
+        mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
+        //getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this);
+
         if (savedInstanceState != null) {
-            Log.i("logtags", "restore");
+            Log.i("fddjdsdfs", "restore: ");
             ParcelableVideoList parcelableVideoList = savedInstanceState
                     .getParcelable(BUNDLE_STATE_VIDEO_LIST);
             if (parcelableVideoList != null) {
@@ -130,15 +134,15 @@ public class PlayListFragment extends BaseFragment
             mNextPageToken = savedInstanceState.getString(BUNDLE_STATE_NEXT_PAGE_TOKEN);
             mTotalResults = savedInstanceState.getInt(BUNDLE_STATE_TOTAL_RESULTS);
             mRvPlaylist.scrollToPosition(savedInstanceState.getInt(BUNDLE_STATE_RV_POSITION));
-            mIsNeedToLoad = false;
-        }
-
-        mArgs = new Bundle();
-        mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
-        if (mIsNeedToLoad) {
+            //mIsNeedToLoad = false;
+        } else {
             setProgressBarVisibility(true);
             if (Utils.hasInternet(getContext())) {
-                getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this);
+                //getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this);
+                if (getLoaderManager().getLoader(LOADER_PLAYLIST_ID) == null) {
+                    getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this).forceLoad();
+                }
+                //getLoaderManager().getLoader(LOADER_PLAYLIST_ID).forceLoad();
             } else {
                 updateUi(DbUtils.getVideos(mPlaylistId));
             }
@@ -146,15 +150,9 @@ public class PlayListFragment extends BaseFragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mIsNeedToLoad = false;
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i("logtags", "save");
+        Log.i("fddjdsdfs", "save: ");
         ParcelableVideoList parcelableVideoList = new ParcelableVideoList(mVideoList);
         outState.putParcelable(BUNDLE_STATE_VIDEO_LIST, parcelableVideoList);
         outState.putString(BUNDLE_STATE_NEXT_PAGE_TOKEN, mNextPageToken);
@@ -174,6 +172,7 @@ public class PlayListFragment extends BaseFragment
         List<Video> videoList = ModelConverter.convertToVideos(data.getVideoList(), mPlaylistId);
         DbUtils.saveVideos(videoList);
         updateUi(videoList);
+        //getLoaderManager().destroyLoader(LOADER_PLAYLIST_ID);
     }
 
     @Override
@@ -202,7 +201,7 @@ public class PlayListFragment extends BaseFragment
                                     mVideoList.get(position).getId());
                             startActivity(playVideoIntent);
                         } else {
-                            Toast.makeText(getContext(), R.string.toast_play_video_no_internet,
+                            Toast.makeText(getContext(), R.string.toast_try_play_no_internet,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -223,7 +222,7 @@ public class PlayListFragment extends BaseFragment
     private void loadNextVideos() {
         mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
         mArgs.putString(PlayListLoader.LOADER_KEY_NEXT_PAGE_TOKEN, mNextPageToken);
-        getLoaderManager().restartLoader(LOADER_PLAYLIST_ID, mArgs, this);
+        getLoaderManager().restartLoader(LOADER_PLAYLIST_ID, mArgs, this).forceLoad();
     }
 
     private void setProgressBarVisibility(boolean visibility) {
