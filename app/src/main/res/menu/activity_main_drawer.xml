@@ -5,15 +5,15 @@
         <item
             android:id="@+id/action_nav_first_playlist"
             android:icon="@drawable/ic_playlist"
-            android:title="Playlist1" />
+            android:title="@string/action_playlist_one" />
         <item
             android:id="@+id/action_nav_second_playlist"
             android:icon="@drawable/ic_playlist"
-            android:title="Playlist2" />
+            android:title="@string/action_playlist_two" />
         <item
             android:id="@+id/action_nav_third_playlist"
             android:icon="@drawable/ic_playlist"
-            android:title="Playlist3" />
+            android:title="@string/action_playlist_three" />
     </group>
 
     <group
@@ -22,7 +22,7 @@
         <item
             android:id="@+id/action_nav_logout"
             android:icon="@drawable/ic_logout"
-            android:title="Logout" />
+            android:title="@string/action_logout" />
     </group>
 
 </menu>

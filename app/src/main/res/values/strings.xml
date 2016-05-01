@@ -3,18 +3,27 @@
 
     <string name="facebook_app_id">1739532899604108</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="toast_auth_error">Authorization error: %s</string>
+    <!--playlists-->
     <string name="playlist_id_first">PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE</string>
     <string name="playlist_id_second">PLWz5rJ2EKKc_Tt7q77qwyKRgytF1RzRx8</string>
     <string name="playlist_id_third">PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!--toasts-->
+    <string name="toast_auth_error">Authorization error: %s</string>
     <string name="toast_error">Error: %s</string>
-    <string name="toast_play_video_no_internet">Sorry, you can not watch video without internet</string>
+    <string name="toast_try_play_no_internet">Sorry, you can't watch video without internet</string>
+
+    <!--nav drawer menu-->
+    <string name="playlists">Playlists</string>
+    <string name="action_playlist_one">Android Performance Patterns</string>
+    <string name="action_playlist_two">Android Dev Summit 2015</string>
+    <string name="action_playlist_three">Android Developer Stories</string>
+    <string name="action_logout">Logout</string>
+
+    <!--other-->
     <string name="label_no_videos">No videos</string>
+
 </resources>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--card view-->
     <dimen name="card_margin_horizontal">0dp</dimen>
 
+    <!--navigation drawer header-->
     <dimen name="nav_header_avatar_margin_top">36dp</dimen>
 
 </resources>
