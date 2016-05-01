@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--main colors-->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!--icon color-->
     <color name="colorIcons">#000000</color>
+
+    <!--toolbar-->
     <color name="colorToolbarShadowEnd">#96000000</color>
     <color name="colorToolbarShadowStart">@android:color/transparent</color>
+
+    <!--card view-->
     <color name="colorCardForeground">#18000000</color>
     <color name="colorCardForegroundFocused">#0F000000</color>
+    <color name="colorPlaylistItemText">#000000</color>
+
+    <!--navigation header-->
     <color name="colorNavHeaderText">#FFFFFF</color>
     <color name="colorNavHeaderTextShadow">#000000</color>
-    <color name="colorPlaylistItemText">#000000</color>
+
 </resources>

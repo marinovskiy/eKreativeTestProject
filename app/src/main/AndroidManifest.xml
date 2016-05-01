@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:configChanges="orientation"
             android:name=".screens.activities.MainActivity" />
         <activity
             android:name=".screens.activities.PlayVideoActivity"

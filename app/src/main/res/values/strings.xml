@@ -8,13 +8,9 @@
     <string name="playlist_id_second">PLWz5rJ2EKKc_Tt7q77qwyKRgytF1RzRx8</string>
     <string name="playlist_id_third">PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c</string>
 
+    <!--navigation drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <!--toasts-->
-    <string name="toast_auth_error">Authorization error: %s</string>
-    <string name="toast_error">Error: %s</string>
-    <string name="toast_try_play_no_internet">Sorry, you can't watch video without internet</string>
 
     <!--nav drawer menu-->
     <string name="playlists">Playlists</string>
@@ -22,6 +18,11 @@
     <string name="action_playlist_two">Android Dev Summit 2015</string>
     <string name="action_playlist_three">Android Developer Stories</string>
     <string name="action_logout">Logout</string>
+
+    <!--toasts-->
+    <string name="toast_auth_error">Authorization error: %s</string>
+    <string name="toast_error">Error: %s</string>
+    <string name="toast_try_play_no_internet">Sorry, you can\'t watch video without internet</string>
 
     <!--other-->
     <string name="label_no_videos">No videos</string>
