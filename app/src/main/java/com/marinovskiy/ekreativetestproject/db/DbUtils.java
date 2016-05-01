@@ -27,11 +27,8 @@ public class DbUtils extends RightDBUtils {
     }
 
     public static void saveVideos(List<Video> videoList) {
-        String playlistId = videoList.get(0).getPlaylistId();
-        if (getVideos(playlistId) != null) {
-            sDbUtils.deleteWhere(Video.class, String.format("playlistId = '%s'", playlistId));
-        }
         for (Video video : videoList) {
+            sDbUtils.deleteWhere(Video.class, String.format("id = '%s'", video.getId()));
             sDbUtils.add(video);
         }
     }
