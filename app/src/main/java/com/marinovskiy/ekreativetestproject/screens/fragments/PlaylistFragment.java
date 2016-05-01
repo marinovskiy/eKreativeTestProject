@@ -7,7 +7,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +67,6 @@ public class PlayListFragment extends BaseFragment
     private int mLoadedItems;
     private boolean mLoading;
 
-    private boolean mIsNeedToLoad = true;
-
     public static PlayListFragment newInstance(String playlistId) {
         PlayListFragment playListFragment = new PlayListFragment();
         Bundle args = new Bundle();
@@ -122,10 +119,8 @@ public class PlayListFragment extends BaseFragment
 
         mArgs = new Bundle();
         mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
-        //getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this);
 
         if (savedInstanceState != null) {
-            Log.i("fddjdsdfs", "restore: ");
             ParcelableVideoList parcelableVideoList = savedInstanceState
                     .getParcelable(BUNDLE_STATE_VIDEO_LIST);
             if (parcelableVideoList != null) {
@@ -134,15 +129,12 @@ public class PlayListFragment extends BaseFragment
             mNextPageToken = savedInstanceState.getString(BUNDLE_STATE_NEXT_PAGE_TOKEN);
             mTotalResults = savedInstanceState.getInt(BUNDLE_STATE_TOTAL_RESULTS);
             mRvPlaylist.scrollToPosition(savedInstanceState.getInt(BUNDLE_STATE_RV_POSITION));
-            //mIsNeedToLoad = false;
         } else {
             setProgressBarVisibility(true);
             if (Utils.hasInternet(getContext())) {
-                //getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this);
                 if (getLoaderManager().getLoader(LOADER_PLAYLIST_ID) == null) {
                     getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this).forceLoad();
                 }
-                //getLoaderManager().getLoader(LOADER_PLAYLIST_ID).forceLoad();
             } else {
                 updateUi(DbUtils.getVideos(mPlaylistId));
             }
@@ -152,7 +144,6 @@ public class PlayListFragment extends BaseFragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i("fddjdsdfs", "save: ");
         ParcelableVideoList parcelableVideoList = new ParcelableVideoList(mVideoList);
         outState.putParcelable(BUNDLE_STATE_VIDEO_LIST, parcelableVideoList);
         outState.putString(BUNDLE_STATE_NEXT_PAGE_TOKEN, mNextPageToken);
@@ -172,7 +163,6 @@ public class PlayListFragment extends BaseFragment
         List<Video> videoList = ModelConverter.convertToVideos(data.getVideoList(), mPlaylistId);
         DbUtils.saveVideos(videoList);
         updateUi(videoList);
-        //getLoaderManager().destroyLoader(LOADER_PLAYLIST_ID);
     }
 
     @Override

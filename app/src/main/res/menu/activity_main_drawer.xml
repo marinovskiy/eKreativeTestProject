@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/action_nav_first_playlist"
-            android:icon="@drawable/ic_playlist"
-            android:title="@string/action_playlist_one" />
-        <item
-            android:id="@+id/action_nav_second_playlist"
-            android:icon="@drawable/ic_playlist"
-            android:title="@string/action_playlist_two" />
-        <item
-            android:id="@+id/action_nav_third_playlist"
-            android:icon="@drawable/ic_playlist"
-            android:title="@string/action_playlist_three" />
-    </group>
+    <item
+        android:id="@+id/playlists"
+        android:title="@string/playlists">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_nav_first_playlist"
+                    android:icon="@drawable/ic_playlist"
+                    android:title="@string/action_playlist_one" />
+                <item
+                    android:id="@+id/action_nav_second_playlist"
+                    android:icon="@drawable/ic_playlist"
+                    android:title="@string/action_playlist_two" />
+                <item
+                    android:id="@+id/action_nav_third_playlist"
+                    android:icon="@drawable/ic_playlist"
+                    android:title="@string/action_playlist_three" />
+            </group>
+        </menu>
+    </item>
 
     <group
         android:id="@+id/group_id"
