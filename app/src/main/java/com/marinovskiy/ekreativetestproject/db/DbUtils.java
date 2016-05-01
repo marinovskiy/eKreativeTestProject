@@ -17,16 +17,30 @@ public class DbUtils extends RightDBUtils {
     }
 
     public void saveUser(User user) {
-        String userId = user.getId();
-        deleteWhere(User.class, String.format("id = '%s'", userId));
-        add(user);
+        if (getUser(user.getId()) != null) {
+            String updateQuery = "UPDATE users\nSET name = '" + user.getName()
+                    + "', email = '" + user.getEmail()
+                    + "', avatarUrl = '" + user.getAvatarUrl()
+                    + "', coverUrl = '" + user.getCoverUrl()
+                    + "'\nWHERE id = '" + user.getId() + "'";
+            executeQuery(updateQuery, User.class);
+        } else {
+            add(user);
+        }
     }
 
     public void saveVideos(List<VideoParcelable> videoParcelableList) {
-        for (VideoParcelable videoParcelable : videoParcelableList) {
-            deleteWhere(VideoParcelable.class, String.format("id = '%s'",
-                    videoParcelable.getId()));
-            add(videoParcelable);
+        for (VideoParcelable video : videoParcelableList) {
+            if (getVideo(video.getId()) != null) {
+                String updateQuery = "UPDATE videos\nSET title = '" + video.getTitle()
+                        + "', pictureUrl = '" + video.getPictureUrl()
+                        + "', description = '" + video.getDescription()
+                        + "', duration = '" + video.getDuration()
+                        + "'\nWHERE id = '" + video.getId() + "'";
+                executeQuery(updateQuery, VideoParcelable.class);
+            } else {
+                add(video);
+            }
         }
     }
 
@@ -35,7 +49,13 @@ public class DbUtils extends RightDBUtils {
         return userList.size() != 0 ? userList.get(0) : null;
     }
 
-    public List<VideoParcelable> getVideos(String playListId) {
+    public VideoParcelable getVideo(String videoId) {
+        List<VideoParcelable> videoList = getAllWhere(String.format("id = '%s'", videoId),
+                VideoParcelable.class);
+        return videoList.size() != 0 ? videoList.get(0) : null;
+    }
+
+    public List<VideoParcelable> getPlaylist(String playListId) {
         List<VideoParcelable> videoParcelableList = getAllWhere(
                 String.format("playlistId = '%s'", playListId), VideoParcelable.class);
         return videoParcelableList.size() != 0 ? videoParcelableList : null;

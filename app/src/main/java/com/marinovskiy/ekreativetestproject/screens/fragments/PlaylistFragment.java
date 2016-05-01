@@ -136,7 +136,7 @@ public class PlayListFragment extends BaseFragment
                     getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this).forceLoad();
                 }
             } else {
-                updateUi(MyApplication.sDbUtils.getVideos(mPlaylistId));
+                updateUi(MyApplication.sDbUtils.getPlaylist(mPlaylistId));
             }
         }
     }
