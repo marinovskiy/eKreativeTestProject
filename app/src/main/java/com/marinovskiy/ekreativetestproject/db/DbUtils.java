@@ -21,8 +21,8 @@ public class DbUtils extends RightDBUtils {
         if (getUser(user.getId()) != null) {
             String userName = DatabaseUtils.sqlEscapeString(user.getName());
             StringBuilder updateQuery = new StringBuilder();
-            updateQuery.append("UPDATE users\nSET name = '").append(userName)
-                    .append("', email = '").append(user.getEmail())
+            updateQuery.append("UPDATE users\nSET name = ").append(userName)
+                    .append(", email = '").append(user.getEmail())
                     .append("', avatarUrl = '").append(user.getAvatarUrl())
                     .append("', coverUrl = '").append(user.getCoverUrl())
                     .append("'\nWHERE id = '").append(user.getId()).append("';");

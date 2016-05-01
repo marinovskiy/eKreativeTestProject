@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoaderManager.LoaderCallbacks<NetworkUser> {
 
-    private static final int LOADER_USER_ID = 0;
+    private static final int LOADER_USER_ID = 99;
 
     @Bind(R.id.toolbar_main)
     Toolbar mToolbar;
@@ -78,7 +78,8 @@ public class MainActivity extends BaseActivity
 
         mUserId = PreferenceManager.getUserId();
 
-        if (Utils.hasInternet(getApplicationContext()) && mUserId != null) {
+        if (Utils.hasInternet(getApplicationContext()) && mUserId != null
+                && getLoaderManager().getLoader(LOADER_USER_ID) == null) {
             Bundle args = new Bundle();
             args.putString(UserLoader.LOADER_KEY_USER_ID, mUserId);
             getLoaderManager().initLoader(LOADER_USER_ID, args, this);
