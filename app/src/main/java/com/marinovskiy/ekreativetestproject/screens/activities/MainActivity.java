@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
-    private int mDrawerPosition = 1;
+    private int mDrawerPosition = 0;
     private PlayListFragment mCurrentFragment;
 
     @Override
@@ -83,6 +83,7 @@ public class MainActivity extends BaseActivity
         }
 
         if (savedInstanceState == null) {
+            mDrawerPosition = 1;
             mCurrentFragment = PlayListFragment.newInstance(getString(R.string.playlist_id_first));
             getSupportFragmentManager()
                     .beginTransaction()
@@ -118,7 +119,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) { // TODO other playlists
+    public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_nav_first_playlist:
                 if (mDrawerPosition != 1) {

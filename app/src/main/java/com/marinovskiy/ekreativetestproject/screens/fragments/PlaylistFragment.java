@@ -7,6 +7,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +121,7 @@ public class PlayListFragment extends BaseFragment
         }
 
         if (savedInstanceState != null) {
+            Log.i("logtags", "restore");
             ParcelableVideoList parcelableVideoList = savedInstanceState
                     .getParcelable(BUNDLE_STATE_VIDEO_LIST);
             if (parcelableVideoList != null) {
@@ -146,6 +148,7 @@ public class PlayListFragment extends BaseFragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.i("logtags", "save");
         ParcelableVideoList parcelableVideoList = new ParcelableVideoList(mVideoList);
         outState.putParcelable(BUNDLE_STATE_VIDEO_LIST, parcelableVideoList);
         outState.putString(BUNDLE_STATE_NEXT_PAGE_TOKEN, mNextPageToken);
