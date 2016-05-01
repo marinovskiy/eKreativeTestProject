@@ -3,4 +3,6 @@
 
     <dimen name="card_margin_horizontal">0dp</dimen>
 
+    <dimen name="nav_header_avatar_margin_top">36dp</dimen>
+
 </resources>

@@ -11,11 +11,13 @@ import java.util.List;
 public class ModelConverter {
 
     public static User convertToUser(NetworkUser networkUser) {
-        return new User(networkUser.getId(),
-                networkUser.getName(),
-                networkUser.getEmail(),
-                networkUser.getPicture().getData().getUrl(),
-                networkUser.getCover().getUrl());
+        User user = new User();
+        user.setId(networkUser.getId());
+        user.setName(networkUser.getName());
+        user.setEmail(networkUser.getEmail() != null ? networkUser.getEmail() : "");
+        user.setAvatarUrl(networkUser.getPicture() != null ? networkUser.getPicture().getData().getUrl() : "");
+        user.setCoverUrl(networkUser.getCover() != null ? networkUser.getCover().getUrl() : "");
+        return user;
     }
 
     public static List<Video> convertToVideos(List<NetworkVideo> networkVideoList,

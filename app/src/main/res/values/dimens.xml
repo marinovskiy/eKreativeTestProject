@@ -14,4 +14,6 @@
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_container_margin_bottom">-2dp</dimen>
 
+    <dimen name="nav_header_avatar_margin_top">16dp</dimen>
+
 </resources>

@@ -174,17 +174,25 @@ public class MainActivity extends BaseActivity
         TextView userEmail = ButterKnife.findById(navigationHeader, R.id.nav_header_tv_email);
 
         userName.setText(user.getName());
-        userEmail.setText(user.getEmail());
+        if (!user.getEmail().equals("")) {
+            userEmail.setText(user.getEmail());
+        } else {
+            userEmail.setVisibility(View.GONE);
+        }
 
-        Glide.with(this)
-                .load(user.getCoverUrl())
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .into(coverPhoto);
-        Glide.with(this)
-                .load(user.getAvatarUrl())
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .into(userAvatar);
+        if (!user.getCoverUrl().equals("")) {
+            Glide.with(this)
+                    .load(user.getCoverUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .into(coverPhoto);
+        }
+        if (!user.getAvatarUrl().equals("")) {
+            Glide.with(this)
+                    .load(user.getAvatarUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                    .into(userAvatar);
+        }
     }
 
     private void logOut() {

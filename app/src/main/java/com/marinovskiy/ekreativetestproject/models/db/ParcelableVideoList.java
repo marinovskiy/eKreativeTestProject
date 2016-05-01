@@ -9,8 +9,8 @@ public class ParcelableVideoList implements Parcelable {
 
     private List<Video> videoList;
 
-//    public ParcelableVideoList() {
-//    }
+    public ParcelableVideoList() {
+    }
 
     public ParcelableVideoList(List<Video> videoList) {
         this.videoList = videoList;

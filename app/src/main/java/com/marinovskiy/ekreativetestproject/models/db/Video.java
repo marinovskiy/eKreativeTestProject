@@ -21,8 +21,8 @@ public class Video implements Parcelable {
 
     private String duration;
 
-//    public Video() {
-//    }
+    public Video() {
+    }
 
     public Video(String id, String playlistId, String title, String pictureUrl,
                  String description, String duration) {
