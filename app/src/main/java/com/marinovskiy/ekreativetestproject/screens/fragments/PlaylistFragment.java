@@ -146,6 +146,12 @@ public class PlayListFragment extends BaseFragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mIsNeedToLoad = false;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.i("logtags", "save");
