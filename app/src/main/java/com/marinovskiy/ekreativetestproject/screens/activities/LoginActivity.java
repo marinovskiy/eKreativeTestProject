@@ -10,8 +10,11 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.marinovskiy.ekreativetestproject.R;
+import com.marinovskiy.ekreativetestproject.api.facebook.FacebookApiConstants;
 import com.marinovskiy.ekreativetestproject.managers.AuthManager;
 import com.marinovskiy.ekreativetestproject.managers.PreferenceManager;
+
+import java.util.Locale;
 
 import butterknife.Bind;
 
@@ -30,7 +33,8 @@ public class LoginActivity extends BaseActivity {
         }
 
         setContentView(R.layout.activity_login);
-        mBtnLogin.setReadPermissions("public_profile", "email"); // TODO STRINGS
+        mBtnLogin.setReadPermissions(FacebookApiConstants.READ_PERMISSIONS_PROFILE,
+                FacebookApiConstants.READ_PERMISSIONS_EMAIL);
 
         mCallbackManager = CallbackManager.Factory.create();
         mBtnLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -46,7 +50,8 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(LoginActivity.this, "Authorization error: " + error.toString(),
+                Toast.makeText(LoginActivity.this, String.format(Locale.getDefault(),
+                        getString(R.string.toast_auth_error), error.toString()),
                         Toast.LENGTH_SHORT).show();
             }
         });

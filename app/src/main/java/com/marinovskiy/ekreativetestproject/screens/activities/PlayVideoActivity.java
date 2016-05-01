@@ -55,7 +55,8 @@ public class PlayVideoActivity extends YouTubeBaseActivity
         if (error.isUserRecoverableError()) {
             error.getErrorDialog(this, RECOVERY_REQUEST).show();
         } else {
-            Toast.makeText(this, String.format(Locale.getDefault(), "Error: %s", error.toString()), // TODO STRINGS
+            Toast.makeText(this, String.format(Locale.getDefault(),
+                    getString(R.string.toast_error), error.toString()),
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -71,5 +72,6 @@ public class PlayVideoActivity extends YouTubeBaseActivity
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        //unregisterReceiver();
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.marinovskiy.ekreativetestproject.api.youtube.YoutubeApiConstants;
 import com.marinovskiy.ekreativetestproject.api.youtube.YoutubeApiManager;
 import com.marinovskiy.ekreativetestproject.models.network.NetworkPageInfo;
 import com.marinovskiy.ekreativetestproject.models.network.NetworkYoutubeResponse;
@@ -28,27 +29,36 @@ public class PlayListLoader extends AsyncTaskLoader<NetworkYoutubeResponse> {
 
     @Override
     public NetworkYoutubeResponse loadInBackground() {
+        // query parameters for playlist
         Map<String, String> playListParameters = new HashMap<>();
-        playListParameters.put("part", "snippet"); // TODO STRINGS
-        playListParameters.put("playlistId", mPlaylistId);
-        playListParameters.put("maxResults", "10");
+        playListParameters.put(YoutubeApiConstants.PART, YoutubeApiConstants.SNIPPET);
+        playListParameters.put(YoutubeApiConstants.PLAYLIST_ID, mPlaylistId);
+        playListParameters.put(YoutubeApiConstants.MAX_RESULTS, YoutubeApiConstants.RESULTS_NUMBER);
         if (mNextPageToken != null) {
-            playListParameters.put("pageToken", mNextPageToken);
+            playListParameters.put(YoutubeApiConstants.PAGE_TOKEN, mNextPageToken);
         }
         NetworkYoutubeResponse response = null;
         try {
-            response = YoutubeApiManager.getInstance().getPlaylist(playListParameters).execute().body(); // TODO check is succesfull
+            // load playlist
+            response = YoutubeApiManager.getInstance()
+                    .getPlaylist(playListParameters).execute().body();
             mNextPageToken = response.getNextPageToken();
             int total = response.getPageInfo().getTotalResults();
 
+            // get videos's id
             String videoIds = "";
             for (int i = 0; i < response.getVideoList().size(); i++) {
-                videoIds = videoIds + response.getVideoList().get(i).getSnippet().getResourceId().getVideoId() + ",";
+                videoIds = videoIds + response.getVideoList().get(i).getSnippet().getResourceId()
+                        .getVideoId() + ",";
             }
+            // query parameters for videos
             Map<String, String> videosParameters = new HashMap<>();
-            videosParameters.put("part", "snippet,contentDetails,statistics"); // TODO STRINGS
-            videosParameters.put("id", videoIds);
+            videosParameters.put(YoutubeApiConstants.PART, YoutubeApiConstants.ALL_PARTS);
+            videosParameters.put(YoutubeApiConstants.ID, videoIds);
+
+            // load videos
             response = YoutubeApiManager.getInstance().getVideos(videosParameters).execute().body();
+
             response.setNextPageToken(mNextPageToken);
             NetworkPageInfo networkPageInfo = new NetworkPageInfo();
             networkPageInfo.setTotalResults(total);

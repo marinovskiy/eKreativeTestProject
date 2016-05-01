@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorIcons">#000000</color>
+    <color name="colorToolbarShadowEnd">#96000000</color>
+    <color name="colorToolbarShadowStart">@android:color/transparent</color>
+    <color name="colorCardForeground">#18000000</color>
+    <color name="colorCardForegroundFocused">#0F000000</color>
+    <color name="colorNavHeaderText">#FFFFFF</color>
+    <color name="colorNavHeaderTextShadow">#000000</color>
+    <color name="colorPlaylistItemText">#000000</color>
 </resources>

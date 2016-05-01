@@ -15,7 +15,8 @@ public class ModelConverter {
         user.setId(networkUser.getId());
         user.setName(networkUser.getName());
         user.setEmail(networkUser.getEmail() != null ? networkUser.getEmail() : "");
-        user.setAvatarUrl(networkUser.getPicture() != null ? networkUser.getPicture().getData().getUrl() : "");
+        user.setAvatarUrl(networkUser.getPicture() != null
+                ? networkUser.getPicture().getData().getUrl() : "");
         user.setCoverUrl(networkUser.getCover() != null ? networkUser.getCover().getUrl() : "");
         return user;
     }

@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoaderManager.LoaderCallbacks<NetworkUser> {
 
-    private static final int LOADER_USER_ID = 0; // TODO STRINGS
+    private static final int LOADER_USER_ID = 0;
 
     @Bind(R.id.toolbar_main)
     Toolbar mToolbar;
@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity
         }
 
         if (savedInstanceState == null) {
-            mCurrentFragment = PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi");
+            mCurrentFragment = PlayListFragment.newInstance(getString(R.string.playlist_id_first));
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.frame_container_main,
@@ -118,11 +118,12 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) { // TODO other playlists
         switch (item.getItemId()) {
             case R.id.action_nav_first_playlist:
                 if (mDrawerPosition != 1) {
-                    mCurrentFragment = PlayListFragment.newInstance("PL0vcQp16X6WjG9P9Rzu3sfGMS4404zPDi");
+                    mCurrentFragment = PlayListFragment
+                            .newInstance(getString(R.string.playlist_id_first));
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(R.id.frame_container_main,
@@ -133,7 +134,8 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.action_nav_second_playlist:
                 if (mDrawerPosition != 2) {
-                    mCurrentFragment = PlayListFragment.newInstance("PL16B22E52465A93A4");
+                    mCurrentFragment = PlayListFragment
+                            .newInstance(getString(R.string.playlist_id_second));
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(R.id.frame_container_main,
@@ -144,7 +146,8 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.action_nav_third_playlist:
                 if (mDrawerPosition != 3) {
-                    mCurrentFragment = PlayListFragment.newInstance("PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c");
+                    mCurrentFragment = PlayListFragment
+                            .newInstance(getString(R.string.playlist_id_third));
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(R.id.frame_container_main,

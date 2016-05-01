@@ -3,8 +3,16 @@ package com.marinovskiy.ekreativetestproject.managers;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
@@ -19,21 +27,33 @@ public class Utils {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public static String getDuration(String str) { // TODO fix it
-        String time = str.substring(2);
-        long duration = 0L;
-        Object[][] indexs = new Object[][]{{"H", 3600}, {"M", 60}, {"S", 1}};
-        for (int i = 0; i < indexs.length; i++) {
-            int index = time.indexOf((String) indexs[i][0]);
+    public static String getDuration(String youtubeDuration) { // TODO fix it
+        String time = youtubeDuration.substring(2);
+        long longDuration = 0L;
+        Object[][] indexes = new Object[][]{{"H", 3600}, {"M", 60}, {"S", 1}};
+        for (Object[] indexObj : indexes) {
+            int index = time.indexOf((String) indexObj[0]);
             if (index != -1) {
                 String value = time.substring(0, index);
-                duration += Integer.parseInt(value) * (int) indexs[i][1] * 1000;
+                longDuration += Integer.parseInt(value) * (int) indexObj[1] * 1000;
                 time = time.substring(value.length() + 1);
             }
         }
-        return String.format(Locale.getDefault(), "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(duration),
-                TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
-                TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+        String duration = "";
+        long hours = TimeUnit.MILLISECONDS.toHours(longDuration);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(longDuration) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(longDuration));
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(longDuration) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(longDuration));
+        if (hours != 0) {
+            duration = duration + TimeUnit.MILLISECONDS.toHours(longDuration) + ":";
+        }
+        if (seconds <= 9) {
+            duration = duration + minutes + ":0" + seconds;
+        } else {
+            duration = duration + minutes + ":" + seconds;
+        }
+        return duration;
     }
 
 }

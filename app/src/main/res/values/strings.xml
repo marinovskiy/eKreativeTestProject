@@ -10,4 +10,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="toast_auth_error">Authorization error: %s</string>
+    <string name="playlist_id_first">PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE</string>
+    <string name="playlist_id_second">PLWz5rJ2EKKc_Tt7q77qwyKRgytF1RzRx8</string>
+    <string name="playlist_id_third">PLWz5rJ2EKKc9ofd2f-_-xmUi07wIGZa1c</string>
+    <string name="toast_error">Error: %s</string>
+    <string name="toast_play_video_no_internet">Sorry, you can not watch video without internet</string>
+    <string name="label_no_videos">No videos</string>
 </resources>

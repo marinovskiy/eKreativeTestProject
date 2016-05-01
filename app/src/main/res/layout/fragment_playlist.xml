@@ -9,6 +9,14 @@
         android:layout_height="wrap_content"
         android:scrollbars="none" />
 
+    <ProgressBar
+        android:id="@+id/pb_fragment_playlist"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
@@ -19,15 +27,15 @@
         android:visibility="gone">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_report" />
+            android:layout_width="@dimen/no_videos_picture_size"
+            android:layout_height="@dimen/no_videos_picture_size"
+            android:src="@drawable/ic_no_videos" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No videos"
-            android:textSize="18sp" />
+            android:text="@string/label_no_videos"
+            android:textSize="@dimen/text_size_label" />
 
     </LinearLayout>
 

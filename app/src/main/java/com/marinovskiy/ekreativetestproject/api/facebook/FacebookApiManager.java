@@ -29,7 +29,8 @@ public class FacebookApiManager {
                             .newBuilder()
                             .addQueryParameter(FacebookApiConstants.ACCESS_TOKEN,
                                     PreferenceManager.getAccessToken())
-                            .addQueryParameter("fields", "name, email, cover, picture") // TODO STRINGS
+                            .addQueryParameter(FacebookApiConstants.FIELDS,
+                                    FacebookApiConstants.FIELDS_PARAM)
                             .build();
 
                     Request request = chain.request()

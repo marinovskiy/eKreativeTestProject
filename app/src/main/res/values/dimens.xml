@@ -15,5 +15,23 @@
     <dimen name="card_container_margin_bottom">-2dp</dimen>
 
     <dimen name="nav_header_avatar_margin_top">16dp</dimen>
+    <dimen name="avatar_size">56dp</dimen>
+    <dimen name="inset_avatar_placeholder">15dp</dimen>
+    <dimen name="inset_top_bottom_card_foreground">2dp</dimen>
+    <dimen name="inset_left_right_card_foreground">0dp</dimen>
+    <dimen name="card_radius">0dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="no_videos_picture_size">100dp</dimen>
+    <dimen name="text_size_label">18sp</dimen>
+    <dimen name="text_size_nav_header">14sp</dimen>
+    <dimen name="nav_header_margin_left_right">16dp</dimen>
+    <dimen name="nav_header_padding_bottom_text">10dp</dimen>
+    <dimen name="nav_header_padding_bottom_name">4dp</dimen>
+    <dimen name="rv_progress_bar_margin_bottom">4dp</dimen>
+    <dimen name="text_size_playlist_item">14sp</dimen>
+    <dimen name="card_view_content_padding">8dp</dimen>
+    <dimen name="video_picture_height">120dp</dimen>
+    <dimen name="card_view_text_margin_left">12dp</dimen>
+    <dimen name="card_view_text_margin_top">6dp</dimen>
 
 </resources>

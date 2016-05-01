@@ -13,50 +13,34 @@
 
     <ImageView
         android:id="@+id/nav_header_iv_avatar"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
+        android:layout_marginLeft="@dimen/nav_header_margin_left_right"
         android:layout_marginTop="@dimen/nav_header_avatar_margin_top"
         android:src="@drawable/avatar_placeholder" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/nav_header_margin_left_right"
+        android:layout_marginRight="@dimen/nav_header_margin_left_right"
         android:orientation="vertical"
-        android:paddingBottom="10dp">
+        android:paddingBottom="@dimen/nav_header_padding_bottom_text">
 
         <TextView
             android:id="@+id/nav_header_tv_name"
+            style="@style/AppTheme.TextStyle.NavHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:paddingBottom="4dp"
-            android:paddingLeft="16dp"
-            android:shadowColor="@android:color/black"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="1"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            tools:text="Alex Marinovskiy" />
+            android:paddingBottom="@dimen/nav_header_padding_bottom_name"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/nav_header_tv_email"
+            style="@style/AppTheme.TextStyle.NavHeader"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:shadowColor="@android:color/black"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="1"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            tools:text="alexander.marinovskiy@gmail.com" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
