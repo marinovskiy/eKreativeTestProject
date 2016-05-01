@@ -22,7 +22,7 @@
     <!--toasts-->
     <string name="toast_auth_error">Authorization error: %s</string>
     <string name="toast_error">Error: %s</string>
-    <string name="toast_try_play_no_internet">Sorry, you can\'t watch video without internet</string>
+    <string name="toast_try_play_no_internet">Sorry, you can\'t watch videoParcelable without internet</string>
 
     <!--other-->
     <string name="label_no_videos">No videos</string>

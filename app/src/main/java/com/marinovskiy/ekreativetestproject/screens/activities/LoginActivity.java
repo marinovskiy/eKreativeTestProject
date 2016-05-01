@@ -12,13 +12,12 @@ import com.facebook.login.widget.LoginButton;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.api.facebook.FacebookApiConstants;
 import com.marinovskiy.ekreativetestproject.managers.AuthManager;
-import com.marinovskiy.ekreativetestproject.managers.PreferenceManager;
 
 import java.util.Locale;
 
 import butterknife.Bind;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements FacebookCallback<LoginResult> {
 
     @Bind(R.id.btn_login)
     LoginButton mBtnLogin;
@@ -30,6 +29,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         if (AuthManager.isUserLoggedIn()) {
             startMainActivity();
+            return;
         }
 
         setContentView(R.layout.activity_login);
@@ -37,24 +37,25 @@ public class LoginActivity extends BaseActivity {
                 FacebookApiConstants.READ_PERMISSIONS_EMAIL);
 
         mCallbackManager = CallbackManager.Factory.create();
-        mBtnLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                AuthManager.login(loginResult);
-                startMainActivity();
-            }
+        mBtnLogin.registerCallback(mCallbackManager, this);
+    }
 
-            @Override
-            public void onCancel() {
-            }
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        AuthManager.login(loginResult);
+        startMainActivity();
+    }
 
-            @Override
-            public void onError(FacebookException error) {
-                Toast.makeText(LoginActivity.this, String.format(Locale.getDefault(),
-                        getString(R.string.toast_auth_error), error.toString()),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+    @Override
+    public void onCancel() {
+    }
+
+    @Override
+    public void onError(FacebookException error) {
+        Toast.makeText(LoginActivity.this, String.format(Locale.getDefault(),
+                getString(R.string.toast_auth_error), error.toString()),
+                Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

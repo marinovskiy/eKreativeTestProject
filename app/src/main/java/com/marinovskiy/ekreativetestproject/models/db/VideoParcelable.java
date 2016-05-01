@@ -3,11 +3,10 @@ package com.marinovskiy.ekreativetestproject.models.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.rightutils.rightutils.db.ColumnIgnore;
 import com.rightutils.rightutils.db.TableName;
 
 @TableName("videos")
-public class Video implements Parcelable {
+public class VideoParcelable implements Parcelable {
 
     private String id;
 
@@ -21,11 +20,11 @@ public class Video implements Parcelable {
 
     private String duration;
 
-    public Video() {
+    public VideoParcelable() {
     }
 
-    public Video(String id, String playlistId, String title, String pictureUrl,
-                 String description, String duration) {
+    public VideoParcelable(String id, String playlistId, String title, String pictureUrl,
+                           String description, String duration) {
         this.id = id;
         this.playlistId = playlistId;
         this.title = title;
@@ -34,7 +33,7 @@ public class Video implements Parcelable {
         this.duration = duration;
     }
 
-    protected Video(Parcel in) {
+    protected VideoParcelable(Parcel in) {
         id = in.readString();
         playlistId = in.readString();
         title = in.readString();
@@ -58,15 +57,15 @@ public class Video implements Parcelable {
         dest.writeString(duration);
     }
 
-    public static final Creator<Video> CREATOR = new Creator<Video>() {
+    public static final Creator<VideoParcelable> CREATOR = new Creator<VideoParcelable>() {
         @Override
-        public Video createFromParcel(Parcel in) {
-            return new Video(in);
+        public VideoParcelable createFromParcel(Parcel in) {
+            return new VideoParcelable(in);
         }
 
         @Override
-        public Video[] newArray(int size) {
-            return new Video[size];
+        public VideoParcelable[] newArray(int size) {
+            return new VideoParcelable[size];
         }
     };
 

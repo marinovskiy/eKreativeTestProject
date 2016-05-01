@@ -1,7 +1,7 @@
 package com.marinovskiy.ekreativetestproject.managers;
 
 import com.marinovskiy.ekreativetestproject.models.db.User;
-import com.marinovskiy.ekreativetestproject.models.db.Video;
+import com.marinovskiy.ekreativetestproject.models.db.VideoParcelable;
 import com.marinovskiy.ekreativetestproject.models.network.NetworkUser;
 import com.marinovskiy.ekreativetestproject.models.network.NetworkVideo;
 
@@ -21,18 +21,18 @@ public class ModelConverter {
         return user;
     }
 
-    public static List<Video> convertToVideos(List<NetworkVideo> networkVideoList,
-                                              String playlistId) {
-        List<Video> videoList = new ArrayList<>();
+    public static List<VideoParcelable> convertToVideos(List<NetworkVideo> networkVideoList,
+                                                        String playlistId) {
+        List<VideoParcelable> videoParcelableList = new ArrayList<>();
         for (NetworkVideo networkVideo : networkVideoList) {
-            videoList.add(new Video(networkVideo.getId(),
+            videoParcelableList.add(new VideoParcelable(networkVideo.getId(),
                     playlistId,
                     networkVideo.getSnippet().getTitle(),
                     networkVideo.getSnippet().getThumbnails().getVideoPicture().getUrl(),
                     networkVideo.getSnippet().getDescription(),
                     networkVideo.getContentDetails().getDuration()));
         }
-        return videoList;
+        return videoParcelableList;
     }
 
 }

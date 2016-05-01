@@ -13,7 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
 import com.marinovskiy.ekreativetestproject.managers.Utils;
-import com.marinovskiy.ekreativetestproject.models.db.Video;
+import com.marinovskiy.ekreativetestproject.models.db.VideoParcelable;
 
 import java.util.List;
 
@@ -25,12 +25,12 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int TYPE_ITEM = 1;
     private final int TYPE_PB = 0;
 
-    private List<Video> mVideoList;
+    private List<VideoParcelable> mVideoParcelableList;
 
     private OnItemClickListener mOnItemClickListener;
 
-    public PlayListAdapter(List<Video> videoList) {
-        mVideoList = videoList;
+    public PlayListAdapter(List<VideoParcelable> videoParcelableList) {
+        mVideoParcelableList = videoParcelableList;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
-            ((ItemViewHolder) holder).bindVideo(mVideoList.get(position));
+            ((ItemViewHolder) holder).bindVideo(mVideoParcelableList.get(position));
         } else {
             ((ProgressBarViewHolder) holder).mProgressBar.setIndeterminate(true);
         }
@@ -58,12 +58,12 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return mVideoList != null ? mVideoList.size() : 0;
+        return mVideoParcelableList != null ? mVideoParcelableList.size() : 0;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mVideoList.get(position) != null ? TYPE_ITEM : TYPE_PB;
+        return mVideoParcelableList.get(position) != null ? TYPE_ITEM : TYPE_PB;
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -93,15 +93,15 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
 
-        private void bindVideo(Video video) {
+        private void bindVideo(VideoParcelable videoParcelable) {
             Glide.with(mIvPicture.getContext())
-                    .load(video.getPictureUrl())
+                    .load(videoParcelable.getPictureUrl())
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(mIvPicture);
 
-            mTvTitle.setText(video.getTitle());
-            mTvDescription.setText(video.getDescription());
-            mTvDuration.setText(Utils.getDuration(video.getDuration()));
+            mTvTitle.setText(videoParcelable.getTitle());
+            mTvDescription.setText(videoParcelable.getDescription());
+            mTvDuration.setText(Utils.getDuration(videoParcelable.getDuration()));
         }
     }
 

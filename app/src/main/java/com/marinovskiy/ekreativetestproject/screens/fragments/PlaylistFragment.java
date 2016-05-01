@@ -16,13 +16,13 @@ import android.widget.Toast;
 
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.adapters.PlayListAdapter;
-import com.marinovskiy.ekreativetestproject.db.DbUtils;
+import com.marinovskiy.ekreativetestproject.applications.MyApplication;
 import com.marinovskiy.ekreativetestproject.interfaces.OnItemClickListener;
 import com.marinovskiy.ekreativetestproject.loaders.PlayListLoader;
 import com.marinovskiy.ekreativetestproject.managers.ModelConverter;
 import com.marinovskiy.ekreativetestproject.managers.Utils;
-import com.marinovskiy.ekreativetestproject.models.db.ParcelableVideoList;
-import com.marinovskiy.ekreativetestproject.models.db.Video;
+import com.marinovskiy.ekreativetestproject.models.db.VideoListParcelable;
+import com.marinovskiy.ekreativetestproject.models.db.VideoParcelable;
 import com.marinovskiy.ekreativetestproject.models.network.NetworkYoutubeResponse;
 import com.marinovskiy.ekreativetestproject.screens.activities.PlayVideoActivity;
 
@@ -41,7 +41,7 @@ public class PlayListFragment extends BaseFragment
     private static final String BUNDLE_STATE_TOTAL_RESULTS = "bundle_total_results";
     private static final String BUNDLE_STATE_RV_POSITION = "bundle_next_rv_position";
 
-    private static final int LOADER_PLAYLIST_ID = 1;
+    private static final int LOADER_PLAYLIST_ID = 100;
 
     @Bind(R.id.rv_playlist)
     RecyclerView mRvPlaylist;
@@ -57,7 +57,7 @@ public class PlayListFragment extends BaseFragment
 
     private String mPlaylistId;
     private String mNextPageToken;
-    private List<Video> mVideoList = new ArrayList<>();
+    private List<VideoParcelable> mVideoParcelableList = new ArrayList<>();
     private int mTotalResults;
 
     private Bundle mArgs;
@@ -106,9 +106,9 @@ public class PlayListFragment extends BaseFragment
                     mLastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
 
                     if (!mLoading && mLoadedItems <= (mLastVisibleItem + mVisibleThreshold)) {
-                        if (mVideoList.size() < mTotalResults) {
-                            mVideoList.add(null);
-                            playListAdapter.notifyItemInserted(mVideoList.size() - 1);
+                        if (mVideoParcelableList.size() < mTotalResults) {
+                            mVideoParcelableList.add(null);
+                            playListAdapter.notifyItemInserted(mVideoParcelableList.size() - 1);
                             loadNextVideos();
                         }
                         mLoading = true;
@@ -121,22 +121,22 @@ public class PlayListFragment extends BaseFragment
         mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
 
         if (savedInstanceState != null) {
-            ParcelableVideoList parcelableVideoList = savedInstanceState
+            VideoListParcelable videoListParcelable = savedInstanceState
                     .getParcelable(BUNDLE_STATE_VIDEO_LIST);
-            if (parcelableVideoList != null) {
-                updateUi(parcelableVideoList.getVideoList());
+            if (videoListParcelable != null) {
+                updateUi(videoListParcelable.getVideoParcelableList());
             }
             mNextPageToken = savedInstanceState.getString(BUNDLE_STATE_NEXT_PAGE_TOKEN);
             mTotalResults = savedInstanceState.getInt(BUNDLE_STATE_TOTAL_RESULTS);
             mRvPlaylist.scrollToPosition(savedInstanceState.getInt(BUNDLE_STATE_RV_POSITION));
         } else {
-            setProgressBarVisibility(true);
+            mProgressBar.setVisibility(View.VISIBLE);
             if (Utils.hasInternet(getContext())) {
                 if (getLoaderManager().getLoader(LOADER_PLAYLIST_ID) == null) {
                     getLoaderManager().initLoader(LOADER_PLAYLIST_ID, mArgs, this).forceLoad();
                 }
             } else {
-                updateUi(DbUtils.getVideos(mPlaylistId));
+                updateUi(MyApplication.sDbUtils.getVideos(mPlaylistId));
             }
         }
     }
@@ -144,8 +144,8 @@ public class PlayListFragment extends BaseFragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        ParcelableVideoList parcelableVideoList = new ParcelableVideoList(mVideoList);
-        outState.putParcelable(BUNDLE_STATE_VIDEO_LIST, parcelableVideoList);
+        VideoListParcelable videoListParcelable = new VideoListParcelable(mVideoParcelableList);
+        outState.putParcelable(BUNDLE_STATE_VIDEO_LIST, videoListParcelable);
         outState.putString(BUNDLE_STATE_NEXT_PAGE_TOKEN, mNextPageToken);
         outState.putInt(BUNDLE_STATE_TOTAL_RESULTS, mTotalResults);
         outState.putInt(BUNDLE_STATE_RV_POSITION, mLastVisibleItem);
@@ -160,25 +160,27 @@ public class PlayListFragment extends BaseFragment
     public void onLoadFinished(Loader<NetworkYoutubeResponse> loader, NetworkYoutubeResponse data) {
         mTotalResults = data.getPageInfo().getTotalResults();
         mNextPageToken = data.getNextPageToken();
-        List<Video> videoList = ModelConverter.convertToVideos(data.getVideoList(), mPlaylistId);
-        DbUtils.saveVideos(videoList);
-        updateUi(videoList);
+        List<VideoParcelable> videoParcelableList = ModelConverter.convertToVideos(
+                data.getVideoList(),
+                mPlaylistId);
+        MyApplication.sDbUtils.saveVideos(videoParcelableList);
+        updateUi(videoParcelableList);
     }
 
     @Override
     public void onLoaderReset(Loader<NetworkYoutubeResponse> loader) {
     }
 
-    private void updateUi(List<Video> videoList) {
-        setProgressBarVisibility(false);
-        if (videoList == null || videoList.size() == 0) {
+    private void updateUi(List<VideoParcelable> videoParcelableList) {
+        mProgressBar.setVisibility(View.GONE);
+        if (videoParcelableList == null || videoParcelableList.size() == 0) {
             mRvPlaylist.setVisibility(View.GONE);
             mEmptyView.setVisibility(View.VISIBLE);
         } else {
             if (mRvPlaylist.getAdapter() == null) {
-                mVideoList = videoList;
+                mVideoParcelableList = videoParcelableList;
 
-                playListAdapter = new PlayListAdapter(mVideoList);
+                playListAdapter = new PlayListAdapter(mVideoParcelableList);
                 mRvPlaylist.setAdapter(playListAdapter);
 
                 playListAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -188,7 +190,7 @@ public class PlayListFragment extends BaseFragment
                             Intent playVideoIntent = new Intent(getActivity(),
                                     PlayVideoActivity.class);
                             playVideoIntent.putExtra(PlayVideoActivity.INTENT_KEY_VIDEO_ID,
-                                    mVideoList.get(position).getId());
+                                    mVideoParcelableList.get(position).getId());
                             startActivity(playVideoIntent);
                         } else {
                             Toast.makeText(getContext(), R.string.toast_try_play_no_internet,
@@ -197,13 +199,13 @@ public class PlayListFragment extends BaseFragment
                     }
                 });
             } else {
-                mVideoList.remove(mVideoList.size() - 1);
-                playListAdapter.notifyItemRemoved(mVideoList.size());
+                mVideoParcelableList.remove(mVideoParcelableList.size() - 1);
+                playListAdapter.notifyItemRemoved(mVideoParcelableList.size());
                 mLoading = false;
 
-                for (int i = 0; i < videoList.size(); i++) {
-                    mVideoList.add(videoList.get(i));
-                    playListAdapter.notifyItemInserted(mVideoList.size());
+                for (int i = 0; i < videoParcelableList.size(); i++) {
+                    mVideoParcelableList.add(videoParcelableList.get(i));
+                    playListAdapter.notifyItemInserted(mVideoParcelableList.size());
                 }
             }
         }
@@ -213,9 +215,5 @@ public class PlayListFragment extends BaseFragment
         mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);
         mArgs.putString(PlayListLoader.LOADER_KEY_NEXT_PAGE_TOKEN, mNextPageToken);
         getLoaderManager().restartLoader(LOADER_PLAYLIST_ID, mArgs, this).forceLoad();
-    }
-
-    private void setProgressBarVisibility(boolean visibility) {
-        mProgressBar.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 }

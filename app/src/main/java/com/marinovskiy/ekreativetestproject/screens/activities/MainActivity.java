@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.marinovskiy.ekreativetestproject.R;
+import com.marinovskiy.ekreativetestproject.applications.MyApplication;
 import com.marinovskiy.ekreativetestproject.db.DbUtils;
 import com.marinovskiy.ekreativetestproject.loaders.UserLoader;
 import com.marinovskiy.ekreativetestproject.managers.AuthManager;
@@ -79,7 +80,7 @@ public class MainActivity extends BaseActivity
             args.putString(UserLoader.LOADER_KEY_USER_ID, PreferenceManager.getUserId());
             getLoaderManager().initLoader(LOADER_USER_ID, args, this);
         } else {
-            updateUi(DbUtils.getUser(PreferenceManager.getUserId()));
+            updateUi(MyApplication.sDbUtils.getUser(PreferenceManager.getUserId()));
         }
 
         if (savedInstanceState == null) {
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onLoadFinished(Loader<NetworkUser> loader, NetworkUser data) {
         User user = ModelConverter.convertToUser(data);
-        DbUtils.saveUser(user);
+        MyApplication.sDbUtils.saveUser(user);
         updateUi(user);
     }
 

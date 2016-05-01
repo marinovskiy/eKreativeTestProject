@@ -21,4 +21,7 @@
     <color name="colorNavHeaderText">#FFFFFF</color>
     <color name="colorNavHeaderTextShadow">#000000</color>
 
+    <!--facebook button colors-->
+    <color name="colorFacebookButton">#3B5998</color>
+    <color name="colorFacebookButtonPressed">#2F477A</color>
 </resources>
