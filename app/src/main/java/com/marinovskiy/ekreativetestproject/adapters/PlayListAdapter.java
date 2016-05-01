@@ -96,7 +96,7 @@ public class PlayListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private void bindVideo(VideoParcelable videoParcelable) {
             Glide.with(mIvPicture.getContext())
                     .load(videoParcelable.getPictureUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mIvPicture);
 
             mTvTitle.setText(videoParcelable.getTitle());

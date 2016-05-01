@@ -1,6 +1,7 @@
 package com.marinovskiy.ekreativetestproject.db;
 
 import android.content.Context;
+import android.database.DatabaseUtils;
 
 import com.marinovskiy.ekreativetestproject.models.db.User;
 import com.marinovskiy.ekreativetestproject.models.db.VideoParcelable;
@@ -18,12 +19,14 @@ public class DbUtils extends RightDBUtils {
 
     public void saveUser(User user) {
         if (getUser(user.getId()) != null) {
-            String updateQuery = "UPDATE users\nSET name = '" + user.getName()
-                    + "', email = '" + user.getEmail()
-                    + "', avatarUrl = '" + user.getAvatarUrl()
-                    + "', coverUrl = '" + user.getCoverUrl()
-                    + "'\nWHERE id = '" + user.getId() + "'";
-            executeQuery(updateQuery, User.class);
+            String userName = DatabaseUtils.sqlEscapeString(user.getName());
+            StringBuilder updateQuery = new StringBuilder();
+            updateQuery.append("UPDATE users\nSET name = '").append(userName)
+                    .append("', email = '").append(user.getEmail())
+                    .append("', avatarUrl = '").append(user.getAvatarUrl())
+                    .append("', coverUrl = '").append(user.getCoverUrl())
+                    .append("'\nWHERE id = '").append(user.getId()).append("';");
+            executeQuery(updateQuery.toString(), User.class);
         } else {
             add(user);
         }
@@ -32,12 +35,15 @@ public class DbUtils extends RightDBUtils {
     public void saveVideos(List<VideoParcelable> videoParcelableList) {
         for (VideoParcelable video : videoParcelableList) {
             if (getVideo(video.getId()) != null) {
-                String updateQuery = "UPDATE videos\nSET title = '" + video.getTitle()
-                        + "', pictureUrl = '" + video.getPictureUrl()
-                        + "', description = '" + video.getDescription()
-                        + "', duration = '" + video.getDuration()
-                        + "'\nWHERE id = '" + video.getId() + "'";
-                executeQuery(updateQuery, VideoParcelable.class);
+                String title = DatabaseUtils.sqlEscapeString(video.getTitle());
+                String description = DatabaseUtils.sqlEscapeString(video.getDescription());
+                StringBuilder updateQuery = new StringBuilder();
+                updateQuery.append("UPDATE videos\nSET title = ").append(title)
+                        .append(", pictureUrl = '").append(video.getPictureUrl())
+                        .append("', description = ").append(description)
+                        .append(", duration = '").append(video.getDuration())
+                        .append("'\nWHERE id = '").append(video.getId()).append("';");
+                executeQuery(updateQuery.toString(), VideoParcelable.class);
             } else {
                 add(video);
             }

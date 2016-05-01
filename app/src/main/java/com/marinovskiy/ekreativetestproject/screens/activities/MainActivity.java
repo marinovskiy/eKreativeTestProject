@@ -196,13 +196,13 @@ public class MainActivity extends BaseActivity
             if (!user.getCoverUrl().equals("")) {
                 Glide.with(this)
                         .load(user.getCoverUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(coverPhoto);
             }
             if (!user.getAvatarUrl().equals("")) {
                 Glide.with(this)
                         .load(user.getAvatarUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         .into(userAvatar);
             }
