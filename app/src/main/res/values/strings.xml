@@ -20,11 +20,15 @@
     <string name="action_logout">Logout</string>
 
     <!--toasts-->
-    <string name="toast_auth_error">Authorization error: %s</string>
     <string name="toast_error">Error: %s</string>
-    <string name="toast_try_play_no_internet">Sorry, you can\'t watch videoParcelable without internet</string>
+    <string name="toast_auth_error">Authorization error: %s</string>
+    <string name="toast_try_login_with_no_internet">Sorry, you can\'t login without internet</string>
+    <string name="toast_try_play_no_internet">Sorry, you can\'t watch videoParcelablewithout internet</string>
 
     <!--other-->
     <string name="label_no_videos">No videos</string>
+    <string name="log_in_with_facebook">Log in with Facebook</string>
+    <string name="not_authorized">Not authorized</string>
+    <string name="action_login">Login</string>
 
 </resources>

@@ -96,12 +96,12 @@ public class PlayListFragment extends BaseFragment
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRvPlaylist.setLayoutManager(mLinearLayoutManager);
 
-        if (Utils.hasInternet(getContext())) {
-            mRvPlaylist.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
+        mRvPlaylist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
+                if (Utils.hasInternet(getContext())) {
                     mLoadedItems = mLinearLayoutManager.getItemCount();
                     mLastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
 
@@ -114,8 +114,8 @@ public class PlayListFragment extends BaseFragment
                         mLoading = true;
                     }
                 }
-            });
-        }
+            }
+        });
 
         mArgs = new Bundle();
         mArgs.putString(PlayListLoader.LOADER_KEY_PLAYLIST_ID, mPlaylistId);

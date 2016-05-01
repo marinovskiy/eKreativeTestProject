@@ -72,6 +72,5 @@ public class PlayVideoActivity extends YouTubeBaseActivity
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
-        //unregisterReceiver();
     }
 }

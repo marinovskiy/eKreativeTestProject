@@ -16,7 +16,7 @@ public class Utils {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public static String getDuration(String youtubeDuration) { // TODO fix it
+    public static String getDuration(String youtubeDuration) {
         String time = youtubeDuration.substring(2);
         long longDuration = 0L;
         Object[][] indexes = new Object[][]{{"H", 3600}, {"M", 60}, {"S", 1}};

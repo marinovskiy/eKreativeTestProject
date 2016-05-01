@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--card view-->
-    <dimen name="card_margin_horizontal">0dp</dimen>
+    <!--login screen-->
+    <dimen name="fab_skip_login_margin_right">16dp</dimen>
+    <dimen name="fab_skip_login_margin_top">16dp</dimen>
 
     <!--navigation drawer header-->
     <dimen name="nav_header_avatar_margin_top">36dp</dimen>
+
+    <!--card view-->
+    <dimen name="card_margin_horizontal">0dp</dimen>
 
 </resources>

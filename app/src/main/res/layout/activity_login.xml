@@ -1,12 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center">
+    android:layout_height="match_parent">
 
-    <com.facebook.login.widget.LoginButton
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_skip_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/fab_skip_login_margin_right"
+        android:layout_marginTop="@dimen/fab_skip_login_margin_top"
+        android:src="@drawable/ic_arrow_skip"
+        app:backgroundTint="@color/colorFacebookButton" />
+
+    <LinearLayout
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/facebook_button_height"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/facebook_button_horizontal_margin"
+        android:layout_marginRight="@dimen/facebook_button_horizontal_margin"
+        android:background="@drawable/facebook_button_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/facebook_button_horizontal_padding"
+        android:paddingRight="@dimen/facebook_button_horizontal_padding">
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="@dimen/facebook_button_letter_size"
+            android:layout_height="@dimen/facebook_button_letter_size"
+            android:background="@color/colorFacebookButtonLetterBackground"
+            android:clickable="false"
+            android:paddingLeft="@dimen/facebook_button_letter_padding"
+            android:paddingTop="@dimen/facebook_button_letter_padding"
+            android:src="@drawable/facebook_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:paddingLeft="@dimen/facebook_button_text_padding_left"
+            android:text="@string/log_in_with_facebook"
+            android:textColor="@color/colorFacebookButtonText"
+            android:textSize="@dimen/facebook_button_text_size"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</RelativeLayout>

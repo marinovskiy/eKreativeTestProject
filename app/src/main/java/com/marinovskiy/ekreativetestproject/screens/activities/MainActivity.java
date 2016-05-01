@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.marinovskiy.ekreativetestproject.R;
 import com.marinovskiy.ekreativetestproject.applications.MyApplication;
-import com.marinovskiy.ekreativetestproject.db.DbUtils;
 import com.marinovskiy.ekreativetestproject.loaders.UserLoader;
 import com.marinovskiy.ekreativetestproject.managers.AuthManager;
 import com.marinovskiy.ekreativetestproject.managers.ModelConverter;
@@ -54,6 +53,8 @@ public class MainActivity extends BaseActivity
     private int mDrawerPosition = 0;
     private PlayListFragment mCurrentFragment;
 
+    private String mUserId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +76,11 @@ public class MainActivity extends BaseActivity
         mNavigationView.setNavigationItemSelectedListener(this);
         mNavigationView.setCheckedItem(R.id.action_nav_first_playlist);
 
-        if (Utils.hasInternet(getApplicationContext())) {
+        mUserId = PreferenceManager.getUserId();
+
+        if (Utils.hasInternet(getApplicationContext()) && mUserId != null) {
             Bundle args = new Bundle();
-            args.putString(UserLoader.LOADER_KEY_USER_ID, PreferenceManager.getUserId());
+            args.putString(UserLoader.LOADER_KEY_USER_ID, mUserId);
             getLoaderManager().initLoader(LOADER_USER_ID, args, this);
         } else {
             updateUi(MyApplication.sDbUtils.getUser(PreferenceManager.getUserId()));
@@ -159,7 +162,11 @@ public class MainActivity extends BaseActivity
                 }
                 break;
             case R.id.action_nav_logout:
-                logOut();
+                if (mUserId != null) {
+                    logOut();
+                } else {
+                    startActivity(new Intent(this, LoginActivity.class));
+                }
                 break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -168,35 +175,42 @@ public class MainActivity extends BaseActivity
 
     private void updateUi(User user) {
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(user.getName());
-        }
-
         View navigationHeader = mNavigationView.getHeaderView(0);
         ImageView coverPhoto = ButterKnife.findById(navigationHeader, R.id.nav_header_iv_cover);
         ImageView userAvatar = ButterKnife.findById(navigationHeader, R.id.nav_header_iv_avatar);
         TextView userName = ButterKnife.findById(navigationHeader, R.id.nav_header_tv_name);
         TextView userEmail = ButterKnife.findById(navigationHeader, R.id.nav_header_tv_email);
 
-        userName.setText(user.getName());
-        if (!user.getEmail().equals("")) {
-            userEmail.setText(user.getEmail());
+        if (user != null) {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(user.getName());
+            }
+
+            userName.setText(user.getName());
+            if (!user.getEmail().equals("")) {
+                userEmail.setText(user.getEmail());
+            } else {
+                userEmail.setVisibility(View.GONE);
+            }
+
+            if (!user.getCoverUrl().equals("")) {
+                Glide.with(this)
+                        .load(user.getCoverUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .into(coverPhoto);
+            }
+            if (!user.getAvatarUrl().equals("")) {
+                Glide.with(this)
+                        .load(user.getAvatarUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                        .into(userAvatar);
+            }
         } else {
             userEmail.setVisibility(View.GONE);
-        }
-
-        if (!user.getCoverUrl().equals("")) {
-            Glide.with(this)
-                    .load(user.getCoverUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .into(coverPhoto);
-        }
-        if (!user.getAvatarUrl().equals("")) {
-            Glide.with(this)
-                    .load(user.getAvatarUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                    .into(userAvatar);
+            MenuItem menuItemLogout = mNavigationView.getMenu().findItem(R.id.action_nav_logout);
+            menuItemLogout.setTitle(R.string.action_login);
+            menuItemLogout.setIcon(R.drawable.ic_login);
         }
     }
 

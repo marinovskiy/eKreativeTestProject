@@ -24,4 +24,7 @@
     <!--facebook button colors-->
     <color name="colorFacebookButton">#3B5998</color>
     <color name="colorFacebookButtonPressed">#2F477A</color>
+    <color name="colorFacebookButtonLetterBackground">#FFFFFF</color>
+    <color name="colorFacebookButtonText">#FFFFFF</color>
+
 </resources>
